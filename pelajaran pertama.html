@@ -326,41 +326,6 @@
 
                     <h3>💻 Contoh Kode VBA</h3>
                     <p>Berikut adalah contoh kode VBA untuk membuat kuis otomatis di Excel:</p>
-                    <div class="code-example">
-<span class="code-comment">' Fungsi untuk memeriksa jawaban siswa</span>
-<span class="code-keyword">Sub</span> <span class="code-function">CheckAnswer</span>()
-    <span class="code-keyword">Dim</span> userAnswer <span class="code-keyword">As</span> Integer
-    <span class="code-keyword">Dim</span> correctAnswer <span class="code-keyword">As</span> Integer
-    
-    <span class="code-comment">' Ambil jawaban dari cell</span>
-    userAnswer = Range(<span class="code-string">"B2"</span>).Value
-    correctAnswer = <span class="code-string">56</span>
-    
-    <span class="code-comment">' Periksa jawaban</span>
-    <span class="code-keyword">If</span> userAnswer = correctAnswer <span class="code-keyword">Then</span>
-        MsgBox <span class="code-string">"Benar! Hebat sekali!"</span>, vbInformation
-        Range(<span class="code-string">"C2"</span>).Value = <span class="code-string">"✓ Benar"</span>
-        Range(<span class="code-string">"C2"</span>).Interior.Color = RGB(<span class="code-string">144, 238, 144</span>)
-        
-        <span class="code-comment">' Excel "bicara"</span>
-        Application.Speech.Speak <span class="code-string">"Selamat, jawaban Anda benar!"</span>
-    <span class="code-keyword">Else</span>
-        MsgBox <span class="code-string">"Coba lagi! Jawaban belum tepat."</span>, vbExclamation
-        Range(<span class="code-string">"C2"</span>).Value = <span class="code-string">"✗ Salah"</span>
-        Range(<span class="code-string">"C2"</span>).Interior.Color = RGB(<span class="code-string">255, 182, 193</span>)
-    <span class="code-keyword">End If</span>
-<span class="code-keyword">End Sub</span>
-
-<span class="code-comment">' Fungsi untuk membuat soal random</span>
-<span class="code-keyword">Sub</span> <span class="code-function">GenerateQuestion</span>()
-    <span class="code-keyword">Dim</span> num1, num2 <span class="code-keyword">As</span> Integer
-    
-    num1 = Int(Rnd() * <span class="code-string">10</span>) + <span class="code-string">1</span>
-    num2 = Int(Rnd() * <span class="code-string">10</span>) + <span class="code-string">1</span>
-    
-    Range(<span class="code-string">"A2"</span>).Value = <span class="code-string">"Berapa "</span> & num1 & <span class="code-string">" × "</span> & num2 & <span class="code-string">"?"</span>
-<span class="code-keyword">End Sub</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -411,4 +376,5 @@
         });
     </script>
 </body>
+
 </html>
