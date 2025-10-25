@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Diagnosis Penguasaan VBA for Excel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .identity-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .identity-section h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .question-container {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #1e3c72;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        .options {
+            margin-top: 20px;
+        }
+
+        .option {
+            background: white;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 1.05em;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .result-section {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .result-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .score-display {
+            font-size: 4em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .score-label {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .category {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .category.excellent {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .category.good {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .category.fair {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .category.poor {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .start-section {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .start-section h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            list-style-position: inside;
+            line-height: 2;
+            color: #333;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Test Diagnosis Penguasaan VBA for Excel</h1>
+            <p>Media Pembelajaran Matematika</p>
+        </div>
+
+        <div class="content">
+            <!-- Start Section -->
+            <div id="startSection" class="start-section">
+                <h2>Selamat Datang di Test Diagnosis VBA</h2>
+                <div class="instructions">
+                    <h3>📋 Petunjuk Pengerjaan:</h3>
+                    <ul>
+                        <li>Test ini terdiri dari 10 soal pilihan ganda</li>
+                        <li>Setiap soal memiliki 4 pilihan jawaban</li>
+                        <li>Pilih satu jawaban yang paling tepat</li>
+                        <li>Anda dapat mengubah jawaban sebelum submit</li>
+                        <li>Hasil akan otomatis tersimpan ke database</li>
+                        <li>Waktu pengerjaan tidak dibatasi</li>
+                    </ul>
+                </div>
+                
+                <div class="identity-section">
+                    <h2>📝 Data Peserta</h2>
+                    <div class="form-group">
+                        <label for="studentName">Nama Lengkap *</label>
+                        <input type="text" id="studentName" placeholder="Masukkan nama lengkap Anda" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentNIM">NIM *</label>
+                        <input type="text" id="studentNIM" placeholder="Masukkan NIM Anda" required>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="startTest()">🚀 Mulai Test</button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progressSection" style="display: none;">
+                <div class="progress-text">
+                    <span id="progressText">Soal 1 dari 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- Questions Container -->
+            <div id="questionsContainer"></div>
+
+            <!-- Button Container -->
+            <div id="btnContainer" class="btn-container" style="display: none;">
+                <button class="btn" id="prevBtn" onclick="previousQuestion()" style="display: none;">⬅ Sebelumnya</button>
+                <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Selanjutnya ➡</button>
+                <button class="btn" id="submitBtn" onclick="submitTest()" style="display: none;">✓ Submit Test</button>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Menyimpan hasil test...</p>
+            </div>
+
+            <!-- Result Section -->
+            <div id="resultSection" class="result-section">
+                <h2>🎉 Test Selesai!</h2>
+                <div class="score-display" id="scoreDisplay">0</div>
+                <div class="score-label">Skor Anda</div>
+                <div id="categoryDisplay" class="category"></div>
+                <p style="margin-top: 20px; color: #666;">Hasil test telah tersimpan ke database.</p>
+                <button class="btn" onclick="location.reload()" style="margin-top: 20px;">🔄 Coba Lagi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Bank soal VBA
+        const questionBank = [
+            {
+                question: "Apa kepanjangan dari VBA?",
+                options: [
+                    "Visual Basic for Applications",
+                    "Virtual Basic Application",
+                    "Visual Base for Apps",
+                    "Very Basic Applications"
+                ],
+                correct: 0
+            },
+            {
+                question: "Untuk membuat tombol interaktif di Excel, kita menggunakan elemen dari tab apa?",
+                options: [
+                    "Home",
+                    "Developer",
+                    "Insert",
+                    "Data"
+                ],
+                correct: 1
+            },
+            {
+                question: "Perhatikan kode berikut:\n\nSub Hitung()\n    Range(\"A1\").Value = 10 + 5\nEnd Sub\n\nApa yang akan muncul di cell A1?",
+                options: [
+                    "10 + 5",
+                    "15",
+                    "Error",
+                    "Tidak ada"
+                ],
+                correct: 1
+            },
+            {
+                question: "Fungsi untuk menampilkan kotak dialog pesan di VBA adalah:",
+                options: [
+                    "ShowMessage()",
+                    "Alert()",
+                    "MsgBox",
+                    "Display()"
+                ],
+                correct: 2
+            },
+            {
+                question: "Untuk membuat perulangan 10 kali di VBA, sintaks yang benar adalah:",
+                options: [
+                    "For i = 1 To 10",
+                    "Loop i = 1 to 10",
+                    "Repeat 10 times",
+                    "While i <= 10"
+                ],
+                correct: 0
+            },
+            {
+                question: "Perhatikan kode:\n\nIf nilai >= 75 Then\n    Range(\"B1\").Value = \"Lulus\"\nElse\n    Range(\"B1\").Value = \"Tidak Lulus\"\nEnd If\n\nJika nilai = 80, apa yang tertulis di B1?",
+                options: [
+                    "Tidak Lulus",
+                    "Lulus",
+                    "80",
+                    "Error"
+                ],
+                correct: 1
+            },
+            {
+                question: "Untuk mengambil nilai dari cell C5, sintaks VBA yang benar adalah:",
+                options: [
+                    "Cell(C5).Value",
+                    "Range(\"C5\").Value",
+                    "Get(\"C5\")",
+                    "Value(C5)"
+                ],
+                correct: 1
+            },
+            {
+                question: "Keyword untuk mendeklarasikan variabel di VBA adalah:",
+                options: [
+                    "Var",
+                    "Let",
+                    "Dim",
+                    "Set"
+                ],
+                correct: 2
+            },
+            {
+                question: "Untuk membuat game matematika di Excel dengan VBA, elemen yang TIDAK diperlukan adalah:",
+                options: [
+                    "Tombol (Button)",
+                    "Random Number Generator",
+                    "Koneksi Internet",
+                    "Sistem Scoring"
+                ],
+                correct: 2
+            },
+            {
+                question: "Perhatikan kode:\n\nDim x As Integer\nx = InputBox(\"Masukkan angka\")\nMsgBox x * 2\n\nJika user mengetik 5, apa output MsgBox?",
+                options: [
+                    "5",
+                    "10",
+                    "5 * 2",
+                    "Error"
+                ],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = [];
+        let shuffledQuestions = [];
+        let studentName = "";
+        let studentNIM = "";
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Shuffle options for each question
+        function shuffleQuestions() {
+            shuffledQuestions = questionBank.map(q => {
+                const optionsWithIndex = q.options.map((opt, idx) => ({
+                    text: opt,
+                    originalIndex: idx
+                }));
+                const shuffledOptions = shuffleArray(optionsWithIndex);
+                const newCorrectIndex = shuffledOptions.findIndex(
+                    opt => opt.originalIndex === q.correct
+                );
+                return {
+                    ...q,
+                    options: shuffledOptions.map(opt => opt.text),
+                    correct: newCorrectIndex
+                };
+            });
+            // Shuffle questions order
+            shuffledQuestions = shuffleArray(shuffledQuestions);
+        }
+
+        function startTest() {
+            studentName = document.getElementById('studentName').value.trim();
+            studentNIM = document.getElementById('studentNIM').value.trim();
+
+            if (!studentName || !studentNIM) {
+                alert('⚠️ Mohon lengkapi Nama dan NIM terlebih dahulu!');
+                return;
+            }
+
+            document.getElementById('startSection').style.display = 'none';
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('btnContainer').style.display = 'flex';
+
+            shuffleQuestions();
+            answers = new Array(shuffledQuestions.length).fill(null);
+            renderQuestions();
+            showQuestion(0);
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            shuffledQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                questionDiv.id = `question-${index}`;
+                
+                let questionHTML = `
+                    <div class="question-number">Soal ${index + 1} dari ${shuffledQuestions.length}</div>
+                    <div class="question-text">${q.question.replace(/\n/g, '<br>')}</div>
+                    <div class="options">
+                `;
+
+                q.options.forEach((option, optIndex) => {
+                    questionHTML += `
+                        <div class="option" onclick="selectOption(${index}, ${optIndex})">
+                            <input type="radio" name="q${index}" id="q${index}_${optIndex}" value="${optIndex}">
+                            <label for="q${index}_${optIndex}">${option}</label>
+                        </div>
+                    `;
+                });
+
+                questionHTML += '</div>';
+                questionDiv.innerHTML = questionHTML;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function showQuestion(index) {
+            document.querySelectorAll('.question-container').forEach(q => {
+                q.classList.remove('active');
+            });
+            
+            document.getElementById(`question-${index}`).classList.add('active');
+            currentQuestion = index;
+            
+            updateProgress();
+            updateButtons();
+            
+            // Restore answer if exists
+            if (answers[index] !== null) {
+                const radio = document.getElementById(`q${index}_${answers[index]}`);
+                if (radio) {
+                    radio.checked = true;
+                    radio.parentElement.classList.add('selected');
+                }
+            }
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            answers[questionIndex] = optionIndex;
+            
+            // Update UI
+            const options = document.querySelectorAll(`#question-${questionIndex} .option`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            const radio = document.getElementById(`q${questionIndex}_${optionIndex}`);
+            radio.checked = true;
+            radio.parentElement.classList.add('selected');
+            
+            updateButtons();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / shuffledQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                `Soal ${currentQuestion + 1} dari ${shuffledQuestions.length}`;
+        }
+
+        function updateButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            prevBtn.style.display = currentQuestion > 0 ? 'block' : 'none';
+            
+            if (currentQuestion === shuffledQuestions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+                submitBtn.disabled = answers[currentQuestion] === null;
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+                nextBtn.disabled = answers[currentQuestion] === null;
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < shuffledQuestions.length - 1 && answers[currentQuestion] !== null) {
+                showQuestion(currentQuestion + 1);
+            }
+        }
+
+        function calculateScore() {
+            let correct = 0;
+            answers.forEach((answer, index) => {
+                if (answer === shuffledQuestions[index].correct) {
+                    correct++;
+                }
+            });
+            return (correct / shuffledQuestions.length) * 100;
+        }
+
+        function getCategory(score) {
+            if (score >= 85) return { text: "🌟 Excellent - Penguasaan Sangat Baik!", class: "excellent" };
+            if (score >= 70) return { text: "👍 Good - Penguasaan Baik", class: "good" };
+            if (score >= 60) return { text: "📚 Fair - Perlu Belajar Lebih", class: "fair" };
+            return { text: "💪 Keep Learning - Terus Berlatih!", class: "poor" };
+        }
+
+        async function submitToGoogleForm(score, category) {
+            // URL Google Form Anda (ganti dengan URL form Anda)
+            const formURL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSeB4rz0GMemh5V4M2tSlJuWho1bDD1_cHNpXPSG7d0EaKDE-Q/formResponse';
+            
+            // Entry IDs dari form (inspect element di form untuk mendapatkan entry ID)
+            const formData = new FormData();
+            formData.append('entry.322119888', studentName);  // Ganti dengan entry ID untuk Nama
+            formData.append('entry.1243123614', studentNIM);   // Ganti dengan entry ID untuk NIM
+            formData.append('entry.52839456', score);        // Ganti dengan entry ID untuk Skor
+            formData.append('entry.131601957', category);     // Ganti dengan entry ID untuk Kategori
+            
+            try {
+                // Gunakan mode no-cors karena Google Form memiliki CORS policy
+                await fetch(formURL, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors'
+                });
+                return true;
+            } catch (error) {
+                console.error('Error submitting to Google Form:', error);
+                return false;
+            }
+        }
+
+        async function submitTest() {
+            if (answers.includes(null)) {
+                alert('⚠️ Mohon jawab semua soal terlebih dahulu!');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('btnContainer').style.display = 'none';
+            document.getElementById('progressSection').style.display = 'none';
+            document.getElementById('loading').classList.add('active');
+
+            // Calculate score
+            const score = calculateScore();
+            const category = getCategory(score);
+
+            // Submit to Google Form
+            await submitToGoogleForm(score.toFixed(1), category.text);
+
+            // Simulate delay for better UX
+            setTimeout(() => {
+                document.getElementById('loading').classList.remove('active');
+                
+                // Show result
+                document.getElementById('scoreDisplay').textContent = score.toFixed(1);
+                document.getElementById('categoryDisplay').textContent = category.text;
+                document.getElementById('categoryDisplay').className = `category ${category.class}`;
+                document.getElementById('resultSection').classList.add('active');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
