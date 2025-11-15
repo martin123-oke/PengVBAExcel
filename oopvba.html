@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial OOP VBA for Excel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background: #e9ecef;
+            color: #1e3c72;
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #1e3c72;
+            border-bottom: 3px solid #1e3c72;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .concept-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .concept-card h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'VBA';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+        .function { color: #61afef; }
+        .property { color: #e06c75; }
+
+        .example-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+        }
+
+        .example-box h4 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .btn-copy {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-copy:hover {
+            background: #5568d3;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .info-box strong {
+            color: #0c5460;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .pillar-card {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .pillar-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .pillar-card h4 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .interactive-demo {
+            background: #fff;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .demo-output {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 100px;
+            font-family: monospace;
+        }
+
+        .btn-run {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-run:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Tutorial OOP VBA for Excel</h1>
+            <p>Panduan Lengkap Object-Oriented Programming dalam VBA</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('intro')">Pengenalan</button>
+            <button class="nav-tab" onclick="showTab('class')">Class Modules</button>
+            <button class="nav-tab" onclick="showTab('encapsulation')">Encapsulation</button>
+            <button class="nav-tab" onclick="showTab('inheritance')">Inheritance</button>
+            <button class="nav-tab" onclick="showTab('polymorphism')">Polymorphism</button>
+            <button class="nav-tab" onclick="showTab('examples')">Contoh Praktis</button>
+        </div>
+
+        <div class="content">
+            <!-- Tab Pengenalan -->
+            <div id="intro" class="tab-content active">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">🎯 Apa itu OOP dalam VBA?</h2>
+                <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
+                    Object-Oriented Programming (OOP) adalah paradigma pemrograman yang mengorganisir kode berdasarkan <span class="highlight">objek</span> yang memiliki <strong>properti</strong> (data) dan <strong>metode</strong> (fungsi). Dalam VBA for Excel, OOP memungkinkan Anda membuat kode yang lebih terstruktur, mudah dipelihara, dan dapat digunakan kembali.
+                </p>
+
+                <div class="pillars-grid">
+                    <div class="pillar-card">
+                        <div class="pillar-icon">🔒</div>
+                        <h4>Encapsulation</h4>
+                        <p>Menyembunyikan detail implementasi dan hanya menampilkan interface yang diperlukan</p>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-icon">🧬</div>
+                        <h4>Inheritance</h4>
+                        <p>Membuat class baru berdasarkan class yang sudah ada (di VBA menggunakan Interface)</p>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-icon">🎭</div>
+                        <h4>Polymorphism</h4>
+                        <p>Kemampuan objek untuk mengambil banyak bentuk berbeda</p>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-icon">📦</div>
+                        <h4>Abstraction</h4>
+                        <p>Menyederhanakan kompleksitas dengan menyembunyikan detail yang tidak perlu</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Keuntungan menggunakan OOP di VBA:</strong>
+                    <ul>
+                        <li>Kode lebih terorganisir dan mudah dibaca</li>
+                        <li>Reusability - dapat menggunakan kembali class di berbagai proyek</li>
+                        <li>Maintenance lebih mudah</li>
+                        <li>Mengurangi duplikasi kode</li>
+                        <li>Memudahkan debugging dan testing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab Class Modules -->
+            <div id="class" class="tab-content">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">📦 Class Modules</h2>
+                
+                <div class="concept-card">
+                    <h3>Apa itu Class Module?</h3>
+                    <p>Class Module adalah template untuk membuat objek. Seperti blueprint atau cetakan kue yang mendefinisikan struktur dan perilaku objek.</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>Cara Membuat Class Module:</h4>
+                    <ol style="margin-left: 20px; line-height: 2;">
+                        <li>Buka VBA Editor (Alt + F11)</li>
+                        <li>Klik Insert → Class Module</li>
+                        <li>Ganti nama class di Properties Window (F4)</li>
+                        <li>Tambahkan properti dan metode</li>
+                    </ol>
+                </div>
+
+                <div class="example-box">
+                    <h4>Contoh Class "Karyawan":</h4>
+                    <div class="code-block">
+
+			<pre>
+<span class="comment">' Class Module: clsKaryawan</span>
+<span class="keyword">Option Explicit</span>
+
+<span class="comment">' Variabel Private (hanya bisa diakses dalam class)</span>
+<span class="keyword">Private</span> mNama <span class="keyword">As String</span>
+<span class="keyword">Private</span> mGaji <span class="keyword">As Double</span>
+<span class="keyword">Private</span> mDepartemen <span class="keyword">As String</span>
+
+<span class="comment">' Property Let (Setter) - untuk mengisi nilai</span>
+<span class="keyword">Public Property Let</span> <span class="function">Nama</span>(<span class="keyword">ByVal</span> value <span class="keyword">As String</span>)
+    mNama = value
+<span class="keyword">End Property</span>
+
+<span class="comment">' Property Get (Getter) - untuk mengambil nilai</span>
+<span class="keyword">Public Property Get</span> <span class="function">Nama</span>() <span class="keyword">As String</span>
+    Nama = mNama
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Gaji</span>(<span class="keyword">ByVal</span> value <span class="keyword">As Double</span>)
+    <span class="keyword">If</span> value >= 0 <span class="keyword">Then</span>
+        mGaji = value
+    <span class="keyword">Else</span>
+        MsgBox <span class="string">"Gaji tidak boleh negatif!"</span>
+    <span class="keyword">End If</span>
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Get</span> <span class="function">Gaji</span>() <span class="keyword">As Double</span>
+    Gaji = mGaji
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Departemen</span>(<span class="keyword">ByVal</span> value <span class="keyword">As String</span>)
+    mDepartemen = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Get</span> <span class="function">Departemen</span>() <span class="keyword">As String</span>
+    Departemen = mDepartemen
+<span class="keyword">End Property</span>
+
+<span class="comment">' Method (Fungsi dalam class)</span>
+<span class="keyword">Public Function</span> <span class="function">HitungBonus</span>() <span class="keyword">As Double</span>
+    HitungBonus = mGaji * 0.1 <span class="comment">' Bonus 10% dari gaji</span>
+<span class="keyword">End Function</span>
+
+<span class="keyword">Public Sub</span> <span class="function">TampilkanInfo</span>()
+    MsgBox <span class="string">"Nama: "</span> & mNama & vbCrLf & _
+           <span class="string">"Departemen: "</span> & mDepartemen & vbCrLf & _
+           <span class="string">"Gaji: Rp "</span> & Format(mGaji, <span class="string">"#,##0"</span>) & vbCrLf & _
+           <span class="string">"Bonus: Rp "</span> & Format(HitungBonus(), <span class="string">"#,##0"</span>)
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>Cara Menggunakan Class:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Dalam Module atau Sheet</span>
+<span class="keyword">Sub</span> <span class="function">ContohPenggunaanClass</span>()
+    <span class="comment">' Membuat instance (objek) dari class</span>
+    <span class="keyword">Dim</span> karyawan <span class="keyword">As New</span> clsKaryawan
+    
+    <span class="comment">' Mengisi properti</span>
+    karyawan.Nama = <span class="string">"Budi Santoso"</span>
+    karyawan.Departemen = <span class="string">"IT"</span>
+    karyawan.Gaji = 8000000
+    
+    <span class="comment">' Memanggil method</span>
+    karyawan.TampilkanInfo
+    
+    <span class="comment">' Mengakses method lain</span>
+    <span class="keyword">Dim</span> bonus <span class="keyword">As Double</span>
+    bonus = karyawan.HitungBonus()
+    Debug.Print <span class="string">"Bonus: "</span> & bonus
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>🔑 Komponen Penting Class Module:</strong>
+                    <ul>
+                        <li><strong>Private Variables:</strong> Variabel yang hanya bisa diakses dalam class (m prefix = member variable)</li>
+                        <li><strong>Property Get:</strong> Mengambil nilai dari properti (seperti getter)</li>
+                        <li><strong>Property Let:</strong> Mengisi nilai properti (seperti setter)</li>
+                        <li><strong>Methods:</strong> Fungsi atau Sub yang merupakan perilaku objek</li>
+                        <li><strong>Constructor (Class_Initialize):</strong> Dijalankan saat objek dibuat</li>
+                        <li><strong>Destructor (Class_Terminate):</strong> Dijalankan saat objek dihapus</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab Encapsulation -->
+            <div id="encapsulation" class="tab-content">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">🔒 Encapsulation (Enkapsulasi)</h2>
+                
+                <div class="concept-card">
+                    <h3>Konsep Encapsulation</h3>
+                    <p>Encapsulation adalah prinsip menyembunyikan detail implementasi internal dan hanya mengekspos interface yang diperlukan. Ini melindungi data dari akses langsung dan modifikasi yang tidak diinginkan.</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>Contoh Class dengan Encapsulation:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: clsRekening</span>
+<span class="keyword">Option Explicit</span>
+
+<span class="comment">' Data PRIVATE - tidak bisa diakses dari luar</span>
+<span class="keyword">Private</span> mNomorRekening <span class="keyword">As String</span>
+<span class="keyword">Private</span> mSaldo <span class="keyword">As Double</span>
+<span class="keyword">Private</span> mPemilik <span class="keyword">As String</span>
+
+<span class="comment">' Constructor - dijalankan saat objek dibuat</span>
+<span class="keyword">Private Sub</span> <span class="function">Class_Initialize</span>()
+    mSaldo = 0
+    mNomorRekening = <span class="string">"REK-"</span> & Format(Now, <span class="string">"yyyymmddhhnnss"</span>)
+<span class="keyword">End Sub</span>
+
+<span class="comment">' Property READ-ONLY (hanya Get, tidak ada Let)</span>
+<span class="keyword">Public Property Get</span> <span class="function">NomorRekening</span>() <span class="keyword">As String</span>
+    NomorRekening = mNomorRekening
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Get</span> <span class="function">Saldo</span>() <span class="keyword">As Double</span>
+    Saldo = mSaldo
+<span class="keyword">End Property</span>
+
+<span class="comment">' Property dengan validasi</span>
+<span class="keyword">Public Property Let</span> <span class="function">Pemilik</span>(<span class="keyword">ByVal</span> value <span class="keyword">As String</span>)
+    <span class="keyword">If</span> Len(Trim(value)) > 0 <span class="keyword">Then</span>
+        mPemilik = value
+    <span class="keyword">Else</span>
+        Err.Raise 1001, , <span class="string">"Nama pemilik tidak boleh kosong"</span>
+    <span class="keyword">End If</span>
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Get</span> <span class="function">Pemilik</span>() <span class="keyword">As String</span>
+    Pemilik = mPemilik
+<span class="keyword">End Property</span>
+
+<span class="comment">' Method PUBLIC untuk manipulasi saldo (controlled access)</span>
+<span class="keyword">Public Sub</span> <span class="function">Setor</span>(<span class="keyword">ByVal</span> jumlah <span class="keyword">As Double</span>)
+    <span class="keyword">If</span> jumlah > 0 <span class="keyword">Then</span>
+        mSaldo = mSaldo + jumlah
+        Debug.Print <span class="string">"Setor berhasil: Rp "</span> & Format(jumlah, <span class="string">"#,##0"</span>)
+    <span class="keyword">Else</span>
+        Err.Raise 1002, , <span class="string">"Jumlah setoran harus positif"</span>
+    <span class="keyword">End If</span>
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Public Function</span> <span class="function">Tarik</span>(<span class="keyword">ByVal</span> jumlah <span class="keyword">As Double</span>) <span class="keyword">As Boolean</span>
+    <span class="keyword">If</span> jumlah <= 0 <span class="keyword">Then</span>
+        Err.Raise 1003, , <span class="string">"Jumlah penarikan harus positif"</span>
+        Tarik = <span class="keyword">False</span>
+    <span class="keyword">ElseIf</span> jumlah > mSaldo <span class="keyword">Then</span>
+        MsgBox <span class="string">"Saldo tidak cukup!"</span>
+        Tarik = <span class="keyword">False</span>
+    <span class="keyword">Else</span>
+        mSaldo = mSaldo - jumlah
+        Debug.Print <span class="string">"Tarik berhasil: Rp "</span> & Format(jumlah, <span class="string">"#,##0"</span>)
+        Tarik = <span class="keyword">True</span>
+    <span class="keyword">End If</span>
+<span class="keyword">End Function</span>
+
+<span class="keyword">Public Sub</span> <span class="function">CetakInfo</span>()
+    Debug.Print String(40, <span class="string">"-"</span>)
+    Debug.Print <span class="string">"Nomor Rekening: "</span> & mNomorRekening
+    Debug.Print <span class="string">"Pemilik: "</span> & mPemilik
+    Debug.Print <span class="string">"Saldo: Rp "</span> & Format(mSaldo, <span class="string">"#,##0"</span>)
+    Debug.Print String(40, <span class="string">"-"</span>)
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>Penggunaan:</h4>
+                    <div class="code-block">
+<pre>
+<span class="keyword">Sub</span> <span class="function">ContohEncapsulation</span>()
+    <span class="keyword">Dim</span> rekening <span class="keyword">As New</span> clsRekening
+    
+    <span class="comment">' Set properti yang diizinkan</span>
+    rekening.Pemilik = <span class="string">"Andi Wijaya"</span>
+    
+    <span class="comment">' Gunakan method untuk manipulasi saldo (bukan akses langsung)</span>
+    rekening.Setor 5000000
+    rekening.Setor 2000000
+    
+    <span class="keyword">If</span> rekening.Tarik(1000000) <span class="keyword">Then</span>
+        Debug.Print <span class="string">"Penarikan berhasil"</span>
+    <span class="keyword">End If</span>
+    
+    <span class="comment">' Baca properti (read-only)</span>
+    Debug.Print <span class="string">"Saldo akhir: "</span> & rekening.Saldo
+    
+    <span class="comment">' Cetak info lengkap</span>
+    rekening.CetakInfo
+    
+    <span class="comment">' INI AKAN ERROR - tidak bisa set saldo langsung!</span>
+    <span class="comment">' rekening.Saldo = 10000000 ' Error karena tidak ada Property Let</span>
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>✅ Keuntungan Encapsulation:</strong>
+                    <ul>
+                        <li>Data terlindungi dari perubahan yang tidak valid</li>
+                        <li>Validasi terpusat di satu tempat</li>
+                        <li>Mudah mengubah implementasi internal tanpa mempengaruhi kode lain</li>
+                        <li>Mengurangi bug karena kontrol akses yang ketat</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab Inheritance -->
+            <div id="inheritance" class="tab-content">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">🧬 Inheritance (Pewarisan)</h2>
+                
+                <div class="concept-card">
+                    <h3>Inheritance di VBA</h3>
+                    <p>VBA tidak mendukung inheritance klasik seperti bahasa OOP lainnya, tetapi kita bisa menggunakan <strong>Interface</strong> untuk mencapai polymorphism dan code reusability.</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>Contoh Interface:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: IKendaraan (Interface)</span>
+<span class="keyword">Option Explicit</span>
+
+<span class="comment">' Interface hanya berisi deklarasi method (tanpa implementasi)</span>
+<span class="keyword">Public Sub</span> <span class="function">Jalan</span>()
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Public Sub</span> <span class="function">Berhenti</span>()
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Public Function</span> <span class="function">InfoKendaraan</span>() <span class="keyword">As String</span>
+<span class="keyword">End Function</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>Class yang Implement Interface - Mobil:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: clsMobil</span>
+<span class="keyword">Option Explicit</span>
+<span class="keyword">Implements</span> IKendaraan
+
+<span class="keyword">Private</span> mMerk <span class="keyword">As String</span>
+<span class="keyword">Private</span> mWarna <span class="keyword">As String</span>
+<span class="keyword">Private</span> mKecepatan <span class="keyword">As Integer</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Merk</span>(<span class="keyword">ByVal</span> value <span class="keyword">As String</span>)
+    mMerk = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Warna</span>(<span class="keyword">ByVal</span> value <span class="keyword">As String</span>)
+    mWarna = value
+<span class="keyword">End Property</span>
+
+<span class="comment">' Implementasi method dari interface IKendaraan</span>
+<span class="keyword">Private Sub</span> <span class="function">IKendaraan_Jalan</span>()
+    mKecepatan = 60
+    Debug.Print <span class="string">"Mobil "</span> & mMerk & <span class="string">" berjalan dengan kecepatan "</span> & mKecepatan & <span class="string">" km/jam"</span>
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Private Sub</span> <span class="function">IKendaraan_Berhenti</span>()
+    mKecepatan = 0
+    Debug.Print <span class="string">"Mobil "</span> & mMerk & <span class="string">" berhenti"</span>
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Private Function</span> <span class="function">IKendaraan_InfoKendaraan</span>() <span class="keyword">As String</span>
+    IKendaraan_InfoKendaraan = <span class="string">"Mobil "</span> & mMerk & <span class="string">" warna "</span> & mWarna
+<span class="keyword">End Function</span>
+
+<span class="comment">' Method khusus untuk mobil</span>
+<span class="keyword">Public Sub</span> <span class="function">BukaAtap</span>()
+    Debug.Print <span class="string">"Atap mobil "</span> & mMerk & <span class="string">" dibuka"</span>
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>Class yang Implement Interface - Motor:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: clsMotor</span>
+<span class="keyword">Option Explicit</span>
+<span class="keyword">Implements</span> IKendaraan
+
+<span class="keyword">Private</span> mMerk <span class="keyword">As String</span>
+<span class="keyword">Private</span> mTipeMesin <span class="keyword">As String</span>
+<span class="keyword">Private</span> mKecepatan <span class="keyword">As Integer</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Merk</span>(<span class="keyword">ByVal</span> value <span class="keyword">As String</span>)
+    mMerk = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">TipeMesin</span>(<span class="keyword">ByVal</span> value <span class="keyword">As String</span>)
+    mTipeMesin = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Private Sub</span> <span class="function">IKendaraan_Jalan</span>()
+    mKecepatan = 80
+    Debug.Print <span class="string">"Motor "</span> & mMerk & <span class="string">" melaju "</span> & mKecepatan & <span class="string">" km/jam"</span>
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Private Sub</span> <span class="function">IKendaraan_Berhenti</span>()
+    mKecepatan = 0
+    Debug.Print <span class="string">"Motor "</span> & mMerk & <span class="string">" berhenti"</span>
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Private Function</span> <span class="function">IKendaraan_InfoKendaraan</span>() <span class="keyword">As String</span>
+    IKendaraan_InfoKendaraan = <span class="string">"Motor "</span> & mMerk & <span class="string">" mesin "</span> & mTipeMesin
+<span class="keyword">End Function</span>
+
+<span class="comment">' Method khusus untuk motor</span>
+<span class="keyword">Public Sub</span> <span class="function">Wheelie</span>()
+    Debug.Print <span class="string">"Motor "</span> & mMerk & <span class="string">" melakukan wheelie!"</span>
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>Penggunaan Interface:</h4>
+                    <div class="code-block">
+<pre>
+<span class="keyword">Sub</span> <span class="function">ContohInterface</span>()
+    <span class="comment">' Deklarasi dengan tipe Interface</span>
+    <span class="keyword">Dim</span> kendaraan <span class="keyword">As</span> IKendaraan
+    
+    <span class="comment">' Buat objek Mobil</span>
+    <span class="keyword">Dim</span> mobil <span class="keyword">As New</span> clsMobil
+    mobil.Merk = <span class="string">"Toyota"</span>
+    mobil.Warna = <span class="string">"Merah"</span>
+    
+    <span class="comment">' Assign ke interface</span>
+    <span class="keyword">Set</span> kendaraan = mobil
+    kendaraan.Jalan
+    Debug.Print kendaraan.InfoKendaraan
+    kendaraan.Berhenti
+    
+    Debug.Print String(40, <span class="string">"-"</span>)
+    
+    <span class="comment">' Buat objek Motor</span>
+    <span class="keyword">Dim</span> motor <span class="keyword">As New</span> clsMotor
+    motor.Merk = <span class="string">"Honda"</span>
+    motor.TipeMesin = <span class="string">"150cc"</span>
+    
+    <span class="comment">' Assign ke interface yang sama</span>
+    <span class="keyword">Set</span> kendaraan = motor
+    kendaraan.Jalan
+    Debug.Print kendaraan.InfoKendaraan
+    kendaraan.Berhenti
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>🎯 Keuntungan Interface:</strong>
+                    <ul>
+                        <li>Memastikan class yang implement interface memiliki method yang sama</li>
+                        <li>Memungkinkan polymorphism - objek berbeda dengan interface yang sama</li>
+                        <li>Membuat kode lebih fleksibel dan mudah di-maintain</li>
+                        <li>Mendukung programming to interface, bukan implementation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab Polymorphism -->
+            <div id="polymorphism" class="tab-content">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">🎭 Polymorphism</h2>
+                
+                <div class="concept-card">
+                    <h3>Konsep Polymorphism</h3>
+                    <p>Polymorphism memungkinkan objek dari class berbeda diperlakukan sebagai objek dari class yang sama melalui interface atau base class. Satu method bisa memiliki implementasi berbeda di class yang berbeda.</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>Interface Bentuk:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: IBentuk</span>
+<span class="keyword">Option Explicit</span>
+
+<span class="keyword">Public Function</span> <span class="function">HitungLuas</span>() <span class="keyword">As Double</span>
+<span class="keyword">End Function</span>
+
+<span class="keyword">Public Function</span> <span class="function">HitungKeliling</span>() <span class="keyword">As Double</span>
+<span class="keyword">End Function</span>
+
+<span class="keyword">Public Function</span> <span class="function">NamaBentuk</span>() <span class="keyword">As String</span>
+<span class="keyword">End Function</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>Class Persegi Panjang:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: clsPersegiPanjang</span>
+<span class="keyword">Option Explicit</span>
+<span class="keyword">Implements</span> IBentuk
+
+<span class="keyword">Private</span> mPanjang <span class="keyword">As Double</span>
+<span class="keyword">Private</span> mLebar <span class="keyword">As Double</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Panjang</span>(<span class="keyword">ByVal</span> value <span class="keyword">As Double</span>)
+    mPanjang = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Lebar</span>(<span class="keyword">ByVal</span> value <span class="keyword">As Double</span>)
+    mLebar = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Private Function</span> <span class="function">IBentuk_HitungLuas</span>() <span class="keyword">As Double</span>
+    IBentuk_HitungLuas = mPanjang * mLebar
+<span class="keyword">End Function</span>
+
+<span class="keyword">Private Function</span> <span class="function">IBentuk_HitungKeliling</span>() <span class="keyword">As Double</span>
+    IBentuk_HitungKeliling = 2 * (mPanjang + mLebar)
+<span class="keyword">End Function</span>
+
+<span class="keyword">Private Function</span> <span class="function">IBentuk_NamaBentuk</span>() <span class="keyword">As String</span>
+    IBentuk_NamaBentuk = <span class="string">"Persegi Panjang"</span>
+<span class="keyword">End Function</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>Class Lingkaran:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: clsLingkaran</span>
+<span class="keyword">Option Explicit</span>
+<span class="keyword">Implements</span> IBentuk
+
+<span class="keyword">Private</span> mJariJari <span class="keyword">As Double</span>
+<span class="keyword">Private Const</span> PI <span class="keyword">As Double</span> = 3.14159265358979
+
+<span class="keyword">Public Property Let</span> <span class="function">JariJari</span>(<span class="keyword">ByVal</span> value <span class="keyword">As Double</span>)
+    mJariJari = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Private Function</span> <span class="function">IBentuk_HitungLuas</span>() <span class="keyword">As Double</span>
+    IBentuk_HitungLuas = PI * mJariJari * mJariJari
+<span class="keyword">End Function</span>
+
+<span class="keyword">Private Function</span> <span class="function">IBentuk_HitungKeliling</span>() <span class="keyword">As Double</span>
+    IBentuk_HitungKeliling = 2 * PI * mJariJari
+<span class="keyword">End Function</span>
+
+<span class="keyword">Private Function</span> <span class="function">IBentuk_NamaBentuk</span>() <span class="keyword">As String</span>
+    IBentuk_NamaBentuk = <span class="string">"Lingkaran"</span>
+<span class="keyword">End Function</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>Class Segitiga:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: clsSegitiga</span>
+<span class="keyword">Option Explicit</span>
+<span class="keyword">Implements</span> IBentuk
+
+<span class="keyword">Private</span> mAlas <span class="keyword">As Double</span>
+<span class="keyword">Private</span> mTinggi <span class="keyword">As Double</span>
+<span class="keyword">Private</span> mSisiA <span class="keyword">As Double</span>
+<span class="keyword">Private</span> mSisiB <span class="keyword">As Double</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Alas</span>(<span class="keyword">ByVal</span> value <span class="keyword">As Double</span>)
+    mAlas = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Tinggi</span>(<span class="keyword">ByVal</span> value <span class="keyword">As Double</span>)
+    mTinggi = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">SisiA</span>(<span class="keyword">ByVal</span> value <span class="keyword">As Double</span>)
+    mSisiA = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">SisiB</span>(<span class="keyword">ByVal</span> value <span class="keyword">As Double</span>)
+    mSisiB = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Private Function</span> <span class="function">IBentuk_HitungLuas</span>() <span class="keyword">As Double</span>
+    IBentuk_HitungLuas = 0.5 * mAlas * mTinggi
+<span class="keyword">End Function</span>
+
+<span class="keyword">Private Function</span> <span class="function">IBentuk_HitungKeliling</span>() <span class="keyword">As Double</span>
+    IBentuk_HitungKeliling = mAlas + mSisiA + mSisiB
+<span class="keyword">End Function</span>
+
+<span class="keyword">Private Function</span> <span class="function">IBentuk_NamaBentuk</span>() <span class="keyword">As String</span>
+    IBentuk_NamaBentuk = <span class="string">"Segitiga"</span>
+<span class="keyword">End Function</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>Contoh Polymorphism - Proses Berbagai Bentuk:</h4>
+                    <div class="code-block">
+<pre>
+<span class="keyword">Sub</span> <span class="function">ContohPolymorphism</span>()
+    <span class="comment">' Collection untuk menyimpan berbagai bentuk</span>
+    <span class="keyword">Dim</span> koleksiBentuk <span class="keyword">As New</span> Collection
+    <span class="keyword">Dim</span> bentuk <span class="keyword">As</span> IBentuk
+    
+    <span class="comment">' Tambahkan persegi panjang</span>
+    <span class="keyword">Dim</span> pp <span class="keyword">As New</span> clsPersegiPanjang
+    pp.Panjang = 10
+    pp.Lebar = 5
+    koleksiBentuk.Add pp
+    
+    <span class="comment">' Tambahkan lingkaran</span>
+    <span class="keyword">Dim</span> lingkaran <span class="keyword">As New</span> clsLingkaran
+    lingkaran.JariJari = 7
+    koleksiBentuk.Add lingkaran
+    
+    <span class="comment">' Tambahkan segitiga</span>
+    <span class="keyword">Dim</span> segitiga <span class="keyword">As New</span> clsSegitiga
+    segitiga.Alas = 6
+    segitiga.Tinggi = 8
+    segitiga.SisiA = 10
+    segitiga.SisiB = 10
+    koleksiBentuk.Add segitiga
+    
+    <span class="comment">' Proses semua bentuk dengan cara yang sama (Polymorphism!)</span>
+    Debug.Print <span class="string">"PERHITUNGAN SEMUA BENTUK"</span>
+    Debug.Print String(50, <span class="string">"="</span>)
+    
+    <span class="keyword">For Each</span> bentuk <span class="keyword">In</span> koleksiBentuk
+        Debug.Print <span class="string">"Bentuk: "</span> & bentuk.NamaBentuk
+        Debug.Print <span class="string">"Luas: "</span> & Format(bentuk.HitungLuas, <span class="string">"0.00"</span>)
+        Debug.Print <span class="string">"Keliling: "</span> & Format(bentuk.HitungKeliling, <span class="string">"0.00"</span>)
+        Debug.Print String(50, <span class="string">"-"</span>)
+    <span class="keyword">Next</span> bentuk
+    
+    <span class="comment">' Hitung total luas semua bentuk</span>
+    <span class="keyword">Dim</span> totalLuas <span class="keyword">As Double</span>
+    <span class="keyword">For Each</span> bentuk <span class="keyword">In</span> koleksiBentuk
+        totalLuas = totalLuas + bentuk.HitungLuas
+    <span class="keyword">Next</span> bentuk
+    
+    Debug.Print <span class="string">"Total Luas Semua Bentuk: "</span> & Format(totalLuas, <span class="string">"0.00"</span>)
+<span class="keyword">End Sub</span>
+
+<span class="comment">' Function yang menerima INTERFACE (bukan class spesifik)</span>
+<span class="keyword">Public Sub</span> <span class="function">CetakInfoBentuk</span>(bentuk <span class="keyword">As</span> IBentuk)
+    Debug.Print <span class="string">"================================"</span>
+    Debug.Print <span class="string">"Info Bentuk: "</span> & bentuk.NamaBentuk
+    Debug.Print <span class="string">"Luas: "</span> & bentuk.HitungLuas
+    Debug.Print <span class="string">"Keliling: "</span> & bentuk.HitungKeliling
+    Debug.Print <span class="string">"================================"</span>
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Manfaat Polymorphism:</strong>
+                    <ul>
+                        <li>Kode lebih fleksibel - satu function bisa handle berbagai tipe objek</li>
+                        <li>Mudah menambahkan class baru tanpa mengubah kode yang sudah ada</li>
+                        <li>Mengurangi duplikasi kode</li>
+                        <li>Memudahkan maintenance dan testing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab Examples -->
+            <div id="examples" class="tab-content">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">💼 Contoh Praktis - Sistem Inventori</h2>
+                
+                <div class="example-box">
+                    <h4>1. Class Produk (Base):</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: clsProduk</span>
+<span class="keyword">Option Explicit</span>
+
+<span class="keyword">Private</span> mKodeProduk <span class="keyword">As String</span>
+<span class="keyword">Private</span> mNamaProduk <span class="keyword">As String</span>
+<span class="keyword">Private</span> mHarga <span class="keyword">As Double</span>
+<span class="keyword">Private</span> mStok <span class="keyword">As Integer</span>
+<span class="keyword">Private</span> mKategori <span class="keyword">As String</span>
+
+<span class="keyword">Private Sub</span> <span class="function">Class_Initialize</span>()
+    mKodeProduk = <span class="string">"PRD-"</span> & Format(Now, <span class="string">"yyyymmddhhnnss"</span>)
+    mStok = 0
+<span class="keyword">End Sub</span>
+
+<span class="comment">' Properties</span>
+<span class="keyword">Public Property Get</span> <span class="function">KodeProduk</span>() <span class="keyword">As String</span>
+    KodeProduk = mKodeProduk
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">NamaProduk</span>(<span class="keyword">ByVal</span> value <span class="keyword">As String</span>)
+    <span class="keyword">If</span> Len(Trim(value)) > 0 <span class="keyword">Then</span>
+        mNamaProduk = value
+    <span class="keyword">End If</span>
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Get</span> <span class="function">NamaProduk</span>() <span class="keyword">As String</span>
+    NamaProduk = mNamaProduk
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Harga</span>(<span class="keyword">ByVal</span> value <span class="keyword">As Double</span>)
+    <span class="keyword">If</span> value >= 0 <span class="keyword">Then</span>
+        mHarga = value
+    <span class="keyword">End If</span>
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Get</span> <span class="function">Harga</span>() <span class="keyword">As Double</span>
+    Harga = mHarga
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Get</span> <span class="function">Stok</span>() <span class="keyword">As Integer</span>
+    Stok = mStok
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Let</span> <span class="function">Kategori</span>(<span class="keyword">ByVal</span> value <span class="keyword">As String</span>)
+    mKategori = value
+<span class="keyword">End Property</span>
+
+<span class="keyword">Public Property Get</span> <span class="function">Kategori</span>() <span class="keyword">As String</span>
+    Kategori = mKategori
+<span class="keyword">End Property</span>
+
+<span class="comment">' Methods</span>
+<span class="keyword">Public Sub</span> <span class="function">TambahStok</span>(<span class="keyword">ByVal</span> jumlah <span class="keyword">As Integer</span>)
+    <span class="keyword">If</span> jumlah > 0 <span class="keyword">Then</span>
+        mStok = mStok + jumlah
+        Debug.Print <span class="string">"Stok "</span> & mNamaProduk & <span class="string">" ditambah "</span> & jumlah
+    <span class="keyword">End If</span>
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Public Function</span> <span class="function">KurangiStok</span>(<span class="keyword">ByVal</span> jumlah <span class="keyword">As Integer</span>) <span class="keyword">As Boolean</span>
+    <span class="keyword">If</span> jumlah > 0 <span class="keyword">And</span> jumlah <= mStok <span class="keyword">Then</span>
+        mStok = mStok - jumlah
+        KurangiStok = <span class="keyword">True</span>
+        Debug.Print <span class="string">"Stok "</span> & mNamaProduk & <span class="string">" dikurangi "</span> & jumlah
+    <span class="keyword">Else</span>
+        KurangiStok = <span class="keyword">False</span>
+        MsgBox <span class="string">"Stok tidak cukup!"</span>
+    <span class="keyword">End If</span>
+<span class="keyword">End Function</span>
+
+<span class="keyword">Public Function</span> <span class="function">HitungNilaiStok</span>() <span class="keyword">As Double</span>
+    HitungNilaiStok = mHarga * mStok
+<span class="keyword">End Function</span>
+
+<span class="keyword">Public Function</span> <span class="function">InfoProduk</span>() <span class="keyword">As String</span>
+    InfoProduk = <span class="string">"Kode: "</span> & mKodeProduk & vbCrLf & _
+                 <span class="string">"Nama: "</span> & mNamaProduk & vbCrLf & _
+                 <span class="string">"Kategori: "</span> & mKategori & vbCrLf & _
+                 <span class="string">"Harga: Rp "</span> & Format(mHarga, <span class="string">"#,##0"</span>) & vbCrLf & _
+                 <span class="string">"Stok: "</span> & mStok & <span class="string">" unit"</span> & vbCrLf & _
+                 <span class="string">"Nilai Stok: Rp "</span> & Format(HitungNilaiStok, <span class="string">"#,##0"</span>)
+<span class="keyword">End Function</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>2. Class Manager Inventori:</h4>
+                    <div class="code-block">
+<pre>
+<span class="comment">' Class Module: clsInventori</span>
+<span class="keyword">Option Explicit</span>
+
+<span class="keyword">Private</span> mProdukList <span class="keyword">As</span> Collection
+
+<span class="keyword">Private Sub</span> <span class="function">Class_Initialize</span>()
+    <span class="keyword">Set</span> mProdukList = <span class="keyword">New</span> Collection
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Public Sub</span> <span class="function">TambahProduk</span>(produk <span class="keyword">As</span> clsProduk)
+    mProdukList.Add produk, produk.KodeProduk
+    Debug.Print <span class="string">"Produk "</span> & produk.NamaProduk & <span class="string">" ditambahkan ke inventori"</span>
+<span class="keyword">End Sub</span>
+
+<span class="keyword">Public Function</span> <span class="function">CariProduk</span>(kode <span class="keyword">As String</span>) <span class="keyword">As</span> clsProduk
+    <span class="keyword">On Error Resume Next</span>
+    <span class="keyword">Set</span> CariProduk = mProdukList(kode)
+    <span class="keyword">On Error GoTo</span> 0
+<span class="keyword">End Function</span>
+
+<span class="keyword">Public Function</span> <span class="function">JumlahProduk</span>() <span class="keyword">As Integer</span>
+    JumlahProduk = mProdukList.Count
+<span class="keyword">End Function</span>
+
+<span class="keyword">Public Function</span> <span class="function">TotalNilaiInventori</span>() <span class="keyword">As Double</span>
+    <span class="keyword">Dim</span> produk <span class="keyword">As</span> clsProduk
+    <span class="keyword">Dim</span> total <span class="keyword">As Double</span>
+    
+    <span class="keyword">For Each</span> produk <span class="keyword">In</span> mProdukList
+        total = total + produk.HitungNilaiStok
+    <span class="keyword">Next</span> produk
+    
+    TotalNilaiInventori = total
+<span class="keyword">End Function</span>
+
+<span class="keyword">Public Sub</span> <span class="function">CetakLaporanInventori</span>()
+    <span class="keyword">Dim</span> produk <span class="keyword">As</span> clsProduk
+    <span class="keyword">Dim</span> ws <span class="keyword">As</span> Worksheet
+    <span class="keyword">Dim</span> baris <span class="keyword">As Integer</span>
+    
+    <span class="comment">' Buat sheet baru atau clear yang ada</span>
+    <span class="keyword">On Error Resume Next</span>
+    <span class="keyword">Set</span> ws = Worksheets(<span class="string">"Laporan Inventori"</span>)
+    <span class="keyword">If</span> ws <span class="keyword">Is Nothing Then</span>
+        <span class="keyword">Set</span> ws = Worksheets.Add
+        ws.Name = <span class="string">"Laporan Inventori"</span>
+    <span class="keyword">Else</span>
+        ws.Cells.Clear
+    <span class="keyword">End If</span>
+    <span class="keyword">On Error GoTo</span> 0
+    
+    <span class="comment">' Header</span>
+    <span class="keyword">With</span> ws
+        .Cells(1, 1).value = <span class="string">"LAPORAN INVENTORI"</span>
+        .Cells(1, 1).Font.Bold = <span class="keyword">True</span>
+        .Cells(1, 1).Font.Size = 14
+        
+        .Cells(3, 1).value = <span class="string">"Kode Produk"</span>
+        .Cells(3, 2).value = <span class="string">"Nama Produk"</span>
+        .Cells(3, 3).value = <span class="string">"Kategori"</span>
+        .Cells(3, 4).value = <span class="string">"Harga"</span>
+        .Cells(3, 5).value = <span class="string">"Stok"</span>
+        .Cells(3, 6).value = <span class="string">"Nilai Stok"</span>
+        .Range(<span class="string">"A3:F3"</span>).Font.Bold = <span class="keyword">True</span>
+        
+        baris = 4
+        <span class="keyword">For Each</span> produk <span class="keyword">In</span> mProdukList
+            .Cells(baris, 1).value = produk.KodeProduk
+            .Cells(baris, 2).value = produk.NamaProduk
+            .Cells(baris, 3).value = produk.Kategori
+            .Cells(baris, 4).value = produk.Harga
+            .Cells(baris, 5).value = produk.Stok
+            .Cells(baris, 6).value = produk.HitungNilaiStok
+            baris = baris + 1
+        <span class="keyword">Next</span> produk
+        
+        <span class="comment">' Total</span>
+        .Cells(baris + 1, 5).value = <span class="string">"Total Nilai:"</span>
+        .Cells(baris + 1, 6).value = TotalNilaiInventori()
+        .Cells(baris + 1, 5).Font.Bold = <span class="keyword">True</span>
+        .Cells(baris + 1, 6).Font.Bold = <span class="keyword">True</span>
+        
+        <span class="comment">' Format</span>
+        .Columns(<span class="string">"A:F"</span>).AutoFit
+        .Range(<span class="string">"D4:D"</span> & baris).NumberFormat = <span class="string">"#,##0"</span>
+        .Range(<span class="string">"F4:F"</span> & baris + 1).NumberFormat = <span class="string">"#,##0"</span>
+    <span class="keyword">End With</span>
+    
+    MsgBox <span class="string">"Laporan inventori berhasil dibuat!"</span>
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>3. Contoh Penggunaan Lengkap:</h4>
+                    <div class="code-block">
+<pre>
+<span class="keyword">Sub</span> <span class="function">DemoSistemInventori</span>()
+    <span class="comment">' Buat objek inventori</span>
+    <span class="keyword">Dim</span> inventori <span class="keyword">As New</span> clsInventori
+    
+    <span class="comment">' Buat beberapa produk</span>
+    <span class="keyword">Dim</span> produk1 <span class="keyword">As New</span> clsProduk
+    produk1.NamaProduk = <span class="string">"Laptop Dell XPS"</span>
+    produk1.Kategori = <span class="string">"Elektronik"</span>
+    produk1.Harga = 15000000
+    produk1.TambahStok 10
+    inventori.TambahProduk produk1
+    
+    <span class="keyword">Dim</span> produk2 <span class="keyword">As New</span> clsProduk
+    produk2.NamaProduk = <span class="string">"Mouse Logitech"</span>
+    produk2.Kategori = <span class="string">"Aksesoris"</span>
+    produk2.Harga = 250000
+    produk2.TambahStok 50
+    inventori.TambahProduk produk2
+    
+    <span class="keyword">Dim</span> produk3 <span class="keyword">As New</span> clsProduk
+    produk3.NamaProduk = <span class="string">"Keyboard Mechanical"</span>
+    produk3.Kategori = <span class="string">"Aksesoris"</span>
+    produk3.Harga = 1500000
+    produk3.TambahStok 25
+    inventori.TambahProduk produk3
+    
+    <span class="keyword">Dim</span> produk4 <span class="keyword">As New</span> clsProduk
+    produk4.NamaProduk = <span class="string">"Monitor Samsung 27 inch"</span>
+    produk4.Kategori = <span class="string">"Elektronik"</span>
+    produk4.Harga = 3500000
+    produk4.TambahStok 15
+    inventori.TambahProduk produk4
+    
+    <span class="keyword">Dim</span> produk5 <span class="keyword">As New</span> clsProduk
+    produk5.NamaProduk = <span class="string">"Webcam Logitech HD"</span>
+    produk5.Kategori = <span class="string">"Aksesoris"</span>
+    produk5.Harga = 850000
+    produk5.TambahStok 30
+    inventori.TambahProduk produk5
+    
+    <span class="comment">' Simulasi transaksi</span>
+    Debug.Print String(60, <span class="string">"="</span>)
+    Debug.Print <span class="string">"SIMULASI TRANSAKSI"</span>
+    Debug.Print String(60, <span class="string">"="</span>)
+    
+    <span class="comment">' Kurangi stok</span>
+    produk1.KurangiStok 3
+    produk2.KurangiStok 10
+    produk4.KurangiStok 5
+    
+    <span class="comment">' Tambah stok</span>
+    produk3.TambahStok 5
+    
+    <span class="comment">' Cetak laporan</span>
+    Debug.Print vbCrLf & <span class="string">"Jumlah produk: "</span> & inventori.JumlahProduk
+    Debug.Print <span class="string">"Total nilai inventori: Rp "</span> & Format(inventori.TotalNilaiInventori, <span class="string">"#,##0"</span>)
+    
+    <span class="comment">' Buat laporan di Excel</span>
+    inventori.CetakLaporanInventori
+<span class="keyword">End Sub</span>
+</pre>
+                    </div>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3 style="color: #1e3c72; margin-bottom: 15px;">🎮 Demo Interaktif - Simulasi Class</h3>
+                    <p>Klik tombol di bawah untuk melihat simulasi pembuatan dan penggunaan class:</p>
+                    
+                    <button class="btn-run" onclick="runDemo()">▶️ Jalankan Demo</button>
+                    <button class="btn-copy" onclick="clearDemo()">🗑️ Hapus Output</button>
+                    
+                    <div class="demo-output" id="demoOutput">
+                        <em>Output akan muncul di sini...</em>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 30px;">
+                    <strong>📚 Kesimpulan & Best Practices OOP di VBA:</strong>
+                    <ul>
+                        <li><strong>Encapsulation:</strong> Selalu gunakan Private variables dengan Property Get/Let untuk kontrol akses</li>
+                        <li><strong>Naming Convention:</strong> Gunakan prefix 'cls' untuk class, 'm' untuk member variables, 'I' untuk interface</li>
+                        <li><strong>Validation:</strong> Validasi data di Property Let sebelum menyimpan ke variable</li>
+                        <li><strong>Interface:</strong> Gunakan interface untuk polymorphism dan fleksibilitas kode</li>
+                        <li><strong>Collection:</strong> Gunakan Collection untuk mengelola banyak objek</li>
+                        <li><strong>Error Handling:</strong> Tambahkan error handling di method-method penting</li>
+                        <li><strong>Documentation:</strong> Tambahkan comment untuk menjelaskan fungsi class dan method</li>
+                    </ul>
+                </div>
+
+                <div class="concept-card" style="margin-top: 20px;">
+                    <h3>🎯 Kapan Menggunakan OOP di VBA?</h3>
+                    <ul>
+                        <li>✅ Ketika membangun aplikasi kompleks dengan banyak entitas</li>
+                        <li>✅ Ketika ingin code reusability tinggi</li>
+                        <li>✅ Ketika bekerja dalam tim dan butuh code yang terstruktur</li>
+                        <li>✅ Ketika membuat library atau add-in</li>
+                        <li>✅ Ketika ada business logic kompleks yang perlu diorganisir</li>
+                        <li>❌ Untuk script sederhana/one-time yang tidak kompleks</li>
+                        <li>❌ Ketika performance adalah prioritas utama (OOP sedikit lebih lambat)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        function runDemo() {
+            const output = document.getElementById('demoOutput');
+            output.innerHTML = '';
+            
+            const steps = [
+                { delay: 0, text: '🏗️ Membuat objek Karyawan...', color: '#1e3c72' },
+                { delay: 500, text: '✅ Objek berhasil dibuat', color: '#28a745' },
+                { delay: 1000, text: '\n📝 Mengisi properti:', color: '#1e3c72' },
+                { delay: 1500, text: '   - Nama: "Siti Nurhaliza"', color: '#495057' },
+                { delay: 2000, text: '   - Departemen: "Marketing"', color: '#495057' },
+                { delay: 2500, text: '   - Gaji: Rp 7,500,000', color: '#495057' },
+                { delay: 3000, text: '\n🔢 Menghitung bonus (10% dari gaji)...', color: '#1e3c72' },
+                { delay: 3500, text: '✅ Bonus: Rp 750,000', color: '#28a745' },
+                { delay: 4000, text: '\n📊 Informasi Lengkap Karyawan:', color: '#1e3c72' },
+                { delay: 4500, text: '   Nama: Siti Nurhaliza', color: '#495057' },
+                { delay: 5000, text: '   Departemen: Marketing', color: '#495057' },
+                { delay: 5500, text: '   Gaji: Rp 7,500,000', color: '#495057' },
+                { delay: 6000, text: '   Bonus: Rp 750,000', color: '#495057' },
+                { delay: 6500, text: '\n🎉 Demo selesai!', color: '#28a745' },
+                { delay: 7000, text: '\n💡 Ini menunjukkan bagaimana class menyimpan data (properti) dan memiliki perilaku (method)', color: '#667eea' }
+            ];
+
+            steps.forEach(step => {
+                setTimeout(() => {
+                    const line = document.createElement('div');
+                    line.style.color = step.color;
+                    line.style.marginBottom = '5px';
+                    line.style.whiteSpace = 'pre-wrap';
+                    line.textContent = step.text;
+                    output.appendChild(line);
+                    output.scrollTop = output.scrollHeight;
+                }, step.delay);
+            });
+        }
+
+        function clearDemo() {
+            const output = document.getElementById('demoOutput');
+            output.innerHTML = '<em>Output akan muncul di sini...</em>';
+        }
+
+        // Copy code functionality
+        document.querySelectorAll('.btn-copy').forEach((btn, index) => {
+            if(btn.textContent.includes('Salin')) {
+                btn.addEventListener('click', function() {
+                    const codeBlock = this.previousElementSibling;
+                    const text = codeBlock.textContent;
+                    
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = '✅ Tersalin!';
+                        this.style.background = '#28a745';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.background = '#667eea';
+                        }, 2000);
+                    });
+                });
+            }
+        });
+
+        // Add hover effect to concept cards
+        document.querySelectorAll('.concept-card, .pillar-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(5px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateX(0)';
+            });
+        });
+    </script>
+</body>
+</html>
