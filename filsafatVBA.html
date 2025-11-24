@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filosofi VBA untuk Media Matematika</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            font-size: 2em;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .philosophy-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-left: 5px solid #ff6b6b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-style: italic;
+        }
+
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-box code {
+            color: #a6e22e;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        .reference-item {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #00d2ff;
+        }
+
+        .example-output {
+            background: #f0f0f0;
+            border: 2px dashed #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Filosofi & Penguasaan VBA Excel</h1>
+            <p class="subtitle">Untuk Menciptakan Media Pembelajaran Matematika yang Interaktif</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('filosofi')">🎯 Filosofi</button>
+            <button class="tab-btn" onclick="showTab('dasar')">🔰 Dasar VBA</button>
+            <button class="tab-btn" onclick="showTab('matematika')">📐 Matematika</button>
+            <button class="tab-btn" onclick="showTab('contoh')">💡 Contoh Kasus</button>
+            <button class="tab-btn" onclick="showTab('referensi')">📖 Referensi</button>
+        </div>
+
+        <div id="filosofi" class="content-section active">
+            <h2>🎯 Filosofi Dasar VBA untuk Media Matematika</h2>
+            
+            <div class="philosophy-box">
+                <h3>"Koding bukan tentang menulis perintah, tetapi tentang menerjemahkan pemikiran matematis menjadi bahasa mesin"</h3>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">🧠</span>1. Paradigma Berpikir Komputasional</h3>
+                <ul>
+                    <li><strong>Dekomposisi:</strong> Memecah masalah matematika kompleks menjadi bagian-bagian kecil yang dapat diprogram</li>
+                    <li><strong>Abstraksi:</strong> Mengidentifikasi pola dan konsep inti dari masalah matematika</li>
+                    <li><strong>Algoritma:</strong> Merancang langkah-langkah logis untuk menyelesaikan masalah</li>
+                    <li><strong>Generalisasi:</strong> Membuat kode yang dapat digunakan untuk berbagai kasus</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">🎨</span>2. Prinsip Desain Media Pembelajaran</h3>
+                <ul>
+                    <li><strong>Interaktivitas:</strong> Siswa dapat berinteraksi langsung dengan konsep matematika</li>
+                    <li><strong>Visualisasi:</strong> Representasi visual dari konsep abstrak matematika</li>
+                    <li><strong>Feedback Instan:</strong> Memberikan umpan balik segera atas input siswa</li>
+                    <li><strong>Adaptivitas:</strong> Media dapat menyesuaikan dengan tingkat pemahaman siswa</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">⚡</span>3. Filosofi "DRY" (Don't Repeat Yourself)</h3>
+                <p>Dalam pemrograman VBA untuk matematika, hindari pengulangan kode. Gunakan:</p>
+                <ul>
+                    <li><strong>Function:</strong> Untuk operasi matematika yang digunakan berulang</li>
+                    <li><strong>Procedure:</strong> Untuk proses yang sistematis</li>
+                    <li><strong>Loop:</strong> Untuk iterasi pada data atau perhitungan berulang</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <h3>💎 Prinsip Emas</h3>
+                <p><strong>Matematika + Pemrograman = Media Pembelajaran yang Powerful</strong></p>
+                <p>VBA Excel adalah jembatan yang sempurna karena menggabungkan kemampuan komputasi matematika dengan interface yang familiar bagi guru dan siswa.</p>
+            </div>
+        </div>
+
+        <div id="dasar" class="content-section">
+            <h2>🔰 Dasar-Dasar VBA untuk Matematika</h2>
+
+            <div class="card">
+                <h3>1. Struktur Dasar VBA</h3>
+                <div class="code-box">
+<pre>
+<code>Sub NamaProgram()
+    ' Deklarasi variabel
+    Dim variabel As TipeData
+    
+    ' Proses/Logika
+    variabel = nilai
+    
+    ' Output
+    MsgBox "Hasil: " & variabel
+End Sub</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Tipe Data untuk Matematika</h3>
+                <ul>
+                    <li><span class="highlight">Integer</span>: Bilangan bulat (-32,768 s.d. 32,767)</li>
+                    <li><span class="highlight">Long</span>: Bilangan bulat besar</li>
+                    <li><span class="highlight">Double</span>: Bilangan desimal (untuk perhitungan presisi)</li>
+                    <li><span class="highlight">String</span>: Teks (untuk label dan keterangan)</li>
+                    <li><span class="highlight">Boolean</span>: True/False (untuk logika kondisional)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>3. Operasi Matematika Dasar</h3>
+                <div class="code-box">
+<pre>
+<code>' Operator Aritmatika
+hasil = a + b      ' Penjumlahan
+hasil = a - b      ' Pengurangan
+hasil = a * b      ' Perkalian
+hasil = a / b      ' Pembagian
+hasil = a ^ b      ' Pangkat
+hasil = a Mod b    ' Modulus (sisa bagi)
+
+' Fungsi Matematika Built-in
+Sqr(angka)         ' Akar kuadrat
+Abs(angka)         ' Nilai absolut
+Round(angka, 2)    ' Pembulatan 2 desimal
+Int(angka)         ' Pembulatan ke bawah</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>4. Struktur Kontrol</h3>
+                <div class="code-box">
+<pre>
+<code>' Percabangan If-Then-Else
+If nilai >= 75 Then
+    grade = "Lulus"
+Else
+    grade = "Tidak Lulus"
+End If
+
+' Loop For
+For i = 1 To 10
+    Cells(i, 1).Value = i * 2
+Next i
+
+' Loop While
+Do While nilai > 0
+    nilai = nilai - 1
+Loop</code></pre>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h3>📌 Tips Penting</h3>
+                <p>Selalu gunakan <strong>Option Explicit</strong> di awal modul untuk memaksa deklarasi variabel. Ini mencegah bug yang sulit dilacak!</p>
+            </div>
+        </div>
+
+        <div id="matematika" class="content-section">
+            <h2>📐 Implementasi Konsep Matematika</h2>
+
+            <div class="card">
+                <h3>1. Operasi Aljabar</h3>
+                <div class="code-box">
+<pre>
+<code>Function HitungKuadrat(x As Double) As Double
+    ' Fungsi f(x) = x²
+    HitungKuadrat = x ^ 2
+End Function
+
+Function PersamaanLinear(m As Double, x As Double, c As Double) As Double
+    ' y = mx + c
+    PersamaanLinear = m * x + c
+End Function
+
+Function RumusKuadrat(a As Double, b As Double, c As Double) As Variant
+    ' Mencari akar persamaan ax² + bx + c = 0
+    Dim diskriminan As Double
+    diskriminan = b ^ 2 - 4 * a * c
+    
+    If diskriminan < 0 Then
+        RumusKuadrat = "Tidak ada akar real"
+    ElseIf diskriminan = 0 Then
+        RumusKuadrat = -b / (2 * a)
+    Else
+        Dim x1 As Double, x2 As Double
+        x1 = (-b + Sqr(diskriminan)) / (2 * a)
+        x2 = (-b - Sqr(diskriminan)) / (2 * a)
+        RumusKuadrat = "x1 = " & x1 & ", x2 = " & x2
+    End If
+End Function</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Geometri</h3>
+                <div class="code-box">
+<pre>
+<code>Function LuasLingkaran(jariJari As Double) As Double
+    Const PI As Double = 3.14159265358979
+    LuasLingkaran = PI * jariJari ^ 2
+End Function
+
+Function KelilingLingkaran(jariJari As Double) As Double
+    Const PI As Double = 3.14159265358979
+    KelilingLingkaran = 2 * PI * jariJari
+End Function
+
+Function LuasSegitiga(alas As Double, tinggi As Double) As Double
+    LuasSegitiga = 0.5 * alas * tinggi
+End Function
+
+Function TheoremaPythagoras(a As Double, b As Double) As Double
+    ' Menghitung sisi miring (c) dari segitiga siku-siku
+    TheoremaPythagoras = Sqr(a ^ 2 + b ^ 2)
+End Function</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>3. Statistika</h3>
+                <div class="code-box">
+<pre>
+<code>Function HitungRataRata(dataRange As Range) As Double
+    Dim total As Double, count As Integer
+    Dim cell As Range
+    
+    For Each cell In dataRange
+        If IsNumeric(cell.Value) Then
+            total = total + cell.Value
+            count = count + 1
+        End If
+    Next cell
+    
+    If count > 0 Then
+        HitungRataRata = total / count
+    Else
+        HitungRataRata = 0
+    End If
+End Function
+
+Function HitungMedian(dataRange As Range) As Double
+    Dim arr() As Double
+    Dim i As Integer, n As Integer
+    
+    ' Urutkan data dan cari nilai tengah
+    ' (Implementasi sorting sederhana)
+    HitungMedian = Application.WorksheetFunction.Median(dataRange)
+End Function</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>4. Bilangan dan Deret</h3>
+                <div class="code-box">
+<pre>
+<code>Function Faktorial(n As Long) As Double
+    Dim i As Long
+    Faktorial = 1
+    For i = 2 To n
+        Faktorial = Faktorial * i
+    Next i
+End Function
+
+Function Fibonacci(n As Integer) As Long
+    If n <= 1 Then
+        Fibonacci = n
+    Else
+        Fibonacci = Fibonacci(n - 1) + Fibonacci(n - 2)
+    End If
+End Function
+
+Sub GenerateBarisanAritmatika()
+    Dim a As Double, b As Double
+    Dim i As Integer
+    
+    a = Val(InputBox("Masukkan suku pertama (a):"))
+    b = Val(InputBox("Masukkan beda (b):"))
+    
+    For i = 0 To 9
+        Cells(i + 1, 1).Value = a + i * b
+    Next i
+End Sub</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="contoh" class="content-section">
+            <h2>💡 Contoh Kasus: Kalkulator Interaktif</h2>
+
+            <div class="card">
+                <h3>Studi Kasus: Media Pembelajaran Persamaan Kuadrat</h3>
+                <p>Membuat aplikasi interaktif di Excel untuk menyelesaikan persamaan kuadrat dengan visualisasi grafik.</p>
+                
+                <div class="code-box">
+<pre>
+<code>Sub KalkulatorPersamaanKuadrat()
+    Dim a As Double, b As Double, c As Double
+    Dim diskriminan As Double
+    Dim x1 As Double, x2 As Double
+    Dim ws As Worksheet
+    
+    Set ws = ActiveSheet
+    
+    ' Input dari sel Excel
+    a = ws.Range("B2").Value
+    b = ws.Range("B3").Value
+    c = ws.Range("B4").Value
+    
+    ' Hitung diskriminan
+    diskriminan = b ^ 2 - 4 * a * c
+    ws.Range("B6").Value = diskriminan
+    
+    ' Tentukan jenis akar
+    If diskriminan < 0 Then
+        ws.Range("B8").Value = "Tidak ada akar real"
+        ws.Range("B9").Value = ""
+        ws.Range("B10").Value = ""
+    ElseIf diskriminan = 0 Then
+        x1 = -b / (2 * a)
+        ws.Range("B8").Value = "Akar kembar"
+        ws.Range("B9").Value = x1
+        ws.Range("B10").Value = ""
+    Else
+        x1 = (-b + Sqr(diskriminan)) / (2 * a)
+        x2 = (-b - Sqr(diskriminan)) / (2 * a)
+        ws.Range("B8").Value = "Dua akar berbeda"
+        ws.Range("B9").Value = x1
+        ws.Range("B10").Value = x2
+    End If
+    
+    ' Generate grafik parabola
+    Call BuatGrafikParabola(a, b, c)
+End Sub
+
+Sub BuatGrafikParabola(a As Double, b As Double, c As Double)
+    Dim i As Integer
+    Dim x As Double, y As Double
+    Dim ws As Worksheet
+    
+    Set ws = Sheets("Grafik")
+    ws.Cells.Clear
+    
+    ' Header
+    ws.Range("A1").Value = "x"
+    ws.Range("B1").Value = "y"
+    
+    ' Generate titik-titik untuk grafik
+    For i = -10 To 10
+        x = i
+        y = a * x ^ 2 + b * x + c
+        ws.Cells(i + 12, 1).Value = x
+        ws.Cells(i + 12, 2).Value = y
+    Next i
+    
+    MsgBox "Grafik berhasil dibuat di sheet 'Grafik'!"
+End Sub</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Layout Excel untuk Kalkulator</h3>
+                <div class="example-output">
+                    <p><strong>Sel B2:</strong> Koefisien a</p>
+                    <p><strong>Sel B3:</strong> Koefisien b</p>
+                    <p><strong>Sel B4:</strong> Koefisien c</p>
+                    <p><strong>Sel B6:</strong> Nilai Diskriminan</p>
+                    <p><strong>Sel B8:</strong> Jenis Akar</p>
+                    <p><strong>Sel B9:</strong> Akar x₁</p>
+                    <p><strong>Sel B10:</strong> Akar x₂</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h3>🎯 Tips Implementasi</h3>
+                <ul>
+                    <li>Gunakan <strong>Data Validation</strong> untuk input agar hanya menerima angka</li>
+                    <li>Tambahkan <strong>Conditional Formatting</strong> untuk memberi warna pada hasil</li>
+                    <li>Buat <strong>Button/Shape</strong> yang di-assign ke macro untuk kemudahan pengguna</li>
+                    <li>Tambahkan <strong>Error Handling</strong> untuk menangani input yang tidak valid</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="referensi" class="content-section">
+            <h2>📖 Referensi dan Sumber Belajar</h2>
+
+            <div class="card">
+                <h3>📚 Buku dan Publikasi</h3>
+                <div class="reference-item">
+                    <strong>1. Walkenbach, J. (2018).</strong> <em>Excel VBA Programming for Dummies (5th Edition).</em> Wiley. ISBN: 978-1119518174
+                    <p>Panduan komprehensif VBA dari dasar hingga lanjutan dengan banyak contoh praktis.</p>
+                </div>
+                <div class="reference-item">
+                    <strong>2. Alexander, M. & Kusleika, D. (2019).</strong> <em>Excel 2019 Power Programming with VBA.</em> Wiley. ISBN: 978-1119514923
+                    <p>Fokus pada teknik programming lanjutan dan optimasi kode VBA.</p>
+                </div>
+                <div class="reference-item">
+                    <strong>3. Jelen, B. & Syrstad, T. (2020).</strong> <em>VBA and Macros for Microsoft Excel.</em> Microsoft Press. ISBN: 978-0135977262
+                    <p>Panduan praktis dengan 100+ contoh makro siap pakai.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🌐 Sumber Online</h3>
+                <div class="reference-item">
+                    <strong>Microsoft Excel VBA Documentation</strong>
+                    <p>https://docs.microsoft.com/en-us/office/vba/api/overview/excel</p>
+                    <p>Dokumentasi resmi Microsoft untuk VBA Excel dengan referensi API lengkap.</p>
+                </div>
+                <div class="reference-item">
+                    <strong>Excel Macro Mastery</strong>
+                    <p>https://excelmacromastery.com/</p>
+                    <p>Tutorial gratis VBA dengan pendekatan bertahap dan contoh kasus nyata.</p>
+                </div>
+                <div class="reference-item">
+                    <strong>Chandoo.org</strong>
+                    <p>https://chandoo.org/wp/excel-vba-tutorial/</p>
+                    <p>Platform belajar Excel dan VBA dengan fokus pada visualisasi data.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎓 Jurnal dan Paper Akademik</h3>
+                <div class="reference-item">
+                    <strong>4. Arsyad, A. (2019).</strong> <em>Media Pembelajaran.</em> PT RajaGrafindo Persada.
+                    <p>Teori dan praktik pengembangan media pembelajaran yang efektif.</p>
+                </div>
+                <div class="reference-item">
+                    <strong>5. Sudjana, N. & Rivai, A. (2017).</strong> <em>Media Pengajaran.</em> Sinar Baru Algensindo.
+                    <p>Dasar-dasar penggunaan dan pembuatan media pengajaran termasuk media digital.</p>
+                </div>
+                <div class="reference-item">
+                    <strong>6. Mayer, R. E. (2014).</strong> <em>The Cambridge Handbook of Multimedia Learning (2nd Edition).</em> Cambridge University Press.
+                    <p>Prinsip-prinsip pembelajaran multimedia yang berbasis riset kognitif.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎬 Video Tutorial</h3>
+                <div class="reference-item">
+                    <strong>Wise Owl Tutorials (YouTube)</strong>
+                    <p>Channel dengan 100+ video tutorial VBA Excel untuk berbagai tingkat keahlian.</p>
+                </div>
+                <div class="reference-item">
+                    <strong>Excel VBA Is Fun (YouTube)</strong>
+                    <p>Tutorial VBA dengan pendekatan project-based learning.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h3>💡 Rekomendasi Jalur Belajar</h3>
+                <ol>
+                    <li><strong>Minggu 1-2:</strong> Pelajari dasar VBA (variabel, loop, kondisional)</li>
+                    <li><strong>Minggu 3-4:</strong> Praktik memanipulasi Range dan Cell</li>
+                    <li><strong>Minggu 5-6:</strong> Buat fungsi matematika custom</li>
+                    <li><strong>Minggu 7-8:</strong> Integrasikan UserForm untuk interaktivitas</li>
+                    <li><strong>Minggu 9-10:</strong> Project: Buat media pembelajaran lengkap</li>
+                </ol>
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>© 2025 | VBA Excel untuk Pendidikan Matematika</strong></p>
+            <p>Dikembangkan dengan filosofi: "Teknologi untuk Pembelajaran yang Bermakna"</p>
+        </footer>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Sembunyikan semua section
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Hapus active dari semua button
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Tampilkan section yang dipilih
+            document.getElementById(tabName).classList.add('active');
+
+            // Aktifkan button yang diklik
+            event.target.classList.add('active');
+
+            // Smooth scroll ke atas
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
