@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengumpulan Tugas Mahasiswa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="url"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="url"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-box p {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Pengumpulan Tugas</h1>
+        <p class="subtitle">Silakan isi form di bawah ini untuk mengumpulkan tugas Anda</p>
+
+        <div class="info-box">
+            <p><strong>Petunjuk:</strong> Pastikan link video sudah dapat diakses (public) sebelum dikumpulkan. Format link: YouTube, Google Drive, atau platform video lainnya.</p>
+        </div>
+
+        <form id="submissionForm">
+            <div class="form-group">
+                <label for="nama">Nama Lengkap <span class="required">*</span></label>
+                <input type="text" id="nama" name="nama" placeholder="Contoh: Martin Bernard" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nim">NIM <span class="required">*</span></label>
+                <input type="text" id="nim" name="nim" placeholder="Contoh: 123456789" required>
+            </div>
+
+            <div class="form-group">
+                <label for="linkVideo">Link Video Tugas <span class="required">*</span></label>
+                <input type="url" id="linkVideo" name="linkVideo" placeholder="https://video.com/..." required>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Kirim Tugas</button>
+        </form>
+
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        // PENTING: Ganti URL ini dengan URL Google Form Anda
+        // Cara mendapatkan URL:
+        // 1. Buat Google Form dengan 3 pertanyaan (Nama, NIM, Link Video)
+        // 2. Klik "Send" > Klik ikon link
+        // 3. Salin link, ganti /viewform dengan /formResponse
+        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSeIExwMrJkF18XLS_ndBYZMSJLqL8WcSx6CS7iJcPL9fG7gbA/formResponse';
+        
+        // PENTING: Ganti dengan entry ID dari Google Form Anda
+        // Cara mendapatkan entry ID:
+        // 1. Buka Google Form
+        // 2. Klik "Preview" (ikon mata)
+        // 3. Inspect element pada setiap input field
+        // 4. Lihat atribut "name" yang formatnya seperti "entry.123456789"
+        const ENTRY_IDS = {
+            nama: 'entry.1570993836',      // Ganti dengan entry ID untuk Nama
+            nim: 'entry.1633905837',        // Ganti dengan entry ID untuk NIM
+            linkVideo: 'entry.1820065634'   // Ganti dengan entry ID untuk Link Video
+        };
+
+        const form = document.getElementById('submissionForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const messageDiv = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Ambil nilai dari form
+            const nama = document.getElementById('nama').value.trim();
+            const nim = document.getElementById('nim').value.trim();
+            const linkVideo = document.getElementById('linkVideo').value.trim();
+
+            // Validasi
+            if (!nama || !nim || !linkVideo) {
+                showMessage('Mohon lengkapi semua field!', 'error');
+                return;
+            }
+
+            // Disable button saat submit
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Mengirim...';
+
+            try {
+                // Buat FormData untuk dikirim ke Google Form
+                const formData = new FormData();
+                formData.append(ENTRY_IDS.nama, nama);
+                formData.append(ENTRY_IDS.nim, nim);
+                formData.append(ENTRY_IDS.linkVideo, linkVideo);
+
+                // Kirim data ke Google Form
+                await fetch(GOOGLE_FORM_URL, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // Penting untuk Google Forms
+                });
+
+                // Tampilkan pesan sukses
+                showMessage('✅ Tugas berhasil dikumpulkan!', 'success');
+                
+                // Reset form
+                form.reset();
+
+            } catch (error) {
+                showMessage('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
+            } finally {
+                // Enable button kembali
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Kirim Tugas';
+            }
+        });
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+
+            // Sembunyikan pesan setelah 5 detik
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Validasi URL saat user mengetik
+        document.getElementById('linkVideo').addEventListener('blur', function() {
+            const url = this.value.trim();
+            if (url && !isValidURL(url)) {
+                showMessage('⚠️ Format URL tidak valid. Pastikan menggunakan format lengkap (https://...)', 'error');
+            }
+        });
+
+        function isValidURL(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>
