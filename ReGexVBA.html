@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RegEx VBA for Excel - Tutorial Lengkap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #2c3e50;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        nav button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        nav button.active {
+            background: #e74c3c;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .code-box {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-box code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .highlight {
+            background: #f39c12;
+            color: #2c3e50;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .exercise {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .exercise h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        .exercise-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Consolas', monospace;
+        }
+
+        .btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #229954;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            display: block;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background: #3498db;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        .pattern-demo {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .pattern-demo input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .match-result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            min-height: 40px;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 RegEx VBA for Excel</h1>
+            <p>Tutorial Lengkap Regular Expression untuk VBA Excel</p>
+        </header>
+
+        <nav>
+            <button onclick="showSection('intro')" class="active">Pengenalan</button>
+            <button onclick="showSection('setup')">Setup VBA</button>
+            <button onclick="showSection('dasar')">Pola Dasar</button>
+            <button onclick="showSection('contoh')">Contoh Kasus</button>
+            <button onclick="showSection('latihan')">Latihan</button>
+            <button onclick="showSection('referensi')">Referensi</button>
+        </nav>
+
+        <div class="content">
+            <!-- SECTION: PENGENALAN -->
+            <div id="intro" class="section active">
+                <h2>🎯 Pengenalan Regular Expression (RegEx)</h2>
+                
+                <p><strong>Regular Expression (RegEx)</strong> adalah pola pencarian teks yang sangat powerful untuk menemukan, mencocokkan, dan memanipulasi string dalam VBA Excel.</p>
+
+                <h3>Mengapa Menggunakan RegEx?</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>✅ Validasi format data (email, telepon, kode pos)</li>
+                    <li>✅ Ekstraksi data spesifik dari teks</li>
+                    <li>✅ Pembersihan data (remove spasi, karakter khusus)</li>
+                    <li>✅ Find & Replace yang kompleks</li>
+                    <li>✅ Parsing data dari berbagai format</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>💡 Tips:</strong> RegEx sangat berguna untuk data cleaning dan validasi dalam Excel, terutama ketika bekerja dengan data yang tidak terstruktur.
+                </div>
+
+                <h3>Contoh Sederhana</h3>
+                <div class="pattern-demo">
+                    <label><strong>Coba Pattern Matcher:</strong></label>
+                    <input type="text" id="testText" placeholder="Ketik teks di sini..." value="Email saya: john@example.com">
+                    <input type="text" id="testPattern" placeholder="Pattern RegEx" value="\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b">
+                    <button class="btn" onclick="testPattern()">Test Pattern</button>
+                    <div class="match-result" id="matchResult"></div>
+                </div>
+            </div>
+
+            <!-- SECTION: SETUP -->
+            <div id="setup" class="section">
+                <h2>⚙️ Setup RegEx di VBA Excel</h2>
+
+                <h3>Langkah 1: Aktifkan Microsoft VBScript Regular Expressions</h3>
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li>Buka Excel dan tekan <code>Alt + F11</code> untuk membuka VBA Editor</li>
+                    <li>Pilih menu <strong>Tools → References</strong></li>
+                    <li>Cari dan centang <strong>"Microsoft VBScript Regular Expressions 5.5"</strong></li>
+                    <li>Klik <strong>OK</strong></li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>⚠️ Penting:</strong> Jika tidak mengaktifkan reference, Anda harus menggunakan late binding dengan CreateObject.
+                </div>
+
+                <h3>Langkah 2: Contoh Kode Dasar</h3>
+                <div class="code-box">
+                    <code>
+<pre>Sub TestRegEx()
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    
+    ' Setting properti RegEx
+    regex.Pattern = "\d+"           ' Pola: satu atau lebih digit
+    regex.Global = True             ' Cari semua match
+    regex.IgnoreCase = True         ' Tidak case sensitive
+    
+    ' Test string
+    Dim testString As String
+    testString = "Harga: 15000, Diskon: 20%"
+    
+    ' Cek apakah ada match
+    If regex.Test(testString) Then
+        MsgBox "Pattern ditemukan!"
+    End If
+    
+    ' Ambil semua matches
+    Dim matches As Object
+    Set matches = regex.Execute(testString)
+    
+    Dim i As Integer
+    For i = 0 To matches.Count - 1
+        Debug.Print matches(i).Value
+    Next i
+End Sub</pre>
+                    </code>
+                </div>
+
+                <h3>Properti Penting RegEx Object</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Properti</th>
+                            <th>Tipe</th>
+                            <th>Deskripsi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>.Pattern</code></td>
+                            <td>String</td>
+                            <td>Pola RegEx yang akan dicari</td>
+                        </tr>
+                        <tr>
+                            <td><code>.Global</code></td>
+                            <td>Boolean</td>
+                            <td>True = cari semua, False = hanya pertama</td>
+                        </tr>
+                        <tr>
+                            <td><code>.IgnoreCase</code></td>
+                            <td>Boolean</td>
+                            <td>True = tidak peduli huruf besar/kecil</td>
+                        </tr>
+                        <tr>
+                            <td><code>.MultiLine</code></td>
+                            <td>Boolean</td>
+                            <td>True = ^ dan $ cocok untuk tiap baris</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SECTION: POLA DASAR -->
+            <div id="dasar" class="section">
+                <h2>📖 Pola Dasar RegEx</h2>
+
+                <h3>1. Karakter Literal</h3>
+                <table>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>Deskripsi</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr>
+                        <td><code>abc</code></td>
+                        <td>Cocok dengan string "abc"</td>
+                        <td>"abc" ✓, "ABC" ✗</td>
+                    </tr>
+                </table>
+
+                <h3>2. Meta Characters</h3>
+                <table>
+                    <tr>
+                        <th>Karakter</th>
+                        <th>Deskripsi</th>
+                        <th>Contoh Pattern</th>
+                    </tr>
+                    <tr>
+                        <td><code>.</code></td>
+                        <td>Semua karakter (kecuali newline)</td>
+                        <td><code>a.c</code> → "abc", "a1c"</td>
+                    </tr>
+                    <tr>
+                        <td><code>^</code></td>
+                        <td>Awal string/baris</td>
+                        <td><code>^Hello</code> → "Hello world"</td>
+                    </tr>
+                    <tr>
+                        <td><code>$</code></td>
+                        <td>Akhir string/baris</td>
+                        <td><code>end$</code> → "The end"</td>
+                    </tr>
+                    <tr>
+                        <td><code>*</code></td>
+                        <td>0 atau lebih kali</td>
+                        <td><code>ab*c</code> → "ac", "abc", "abbc"</td>
+                    </tr>
+                    <tr>
+                        <td><code>+</code></td>
+                        <td>1 atau lebih kali</td>
+                        <td><code>ab+c</code> → "abc", "abbc"</td>
+                    </tr>
+                    <tr>
+                        <td><code>?</code></td>
+                        <td>0 atau 1 kali</td>
+                        <td><code>ab?c</code> → "ac", "abc"</td>
+                    </tr>
+                    <tr>
+                        <td><code>|</code></td>
+                        <td>OR</td>
+                        <td><code>cat|dog</code> → "cat" atau "dog"</td>
+                    </tr>
+                </table>
+
+                <h3>3. Character Classes</h3>
+                <table>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>Deskripsi</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr>
+                        <td><code>[abc]</code></td>
+                        <td>a, b, atau c</td>
+                        <td><code>[aeiou]</code> → vokal</td>
+                    </tr>
+                    <tr>
+                        <td><code>[^abc]</code></td>
+                        <td>Bukan a, b, atau c</td>
+                        <td><code>[^0-9]</code> → bukan angka</td>
+                    </tr>
+                    <tr>
+                        <td><code>[a-z]</code></td>
+                        <td>Huruf kecil a sampai z</td>
+                        <td><code>[a-zA-Z]</code> → semua huruf</td>
+                    </tr>
+                    <tr>
+                        <td><code>\d</code></td>
+                        <td>Digit (0-9)</td>
+                        <td><code>\d{3}</code> → 3 digit</td>
+                    </tr>
+                    <tr>
+                        <td><code>\D</code></td>
+                        <td>Bukan digit</td>
+                        <td><code>\D+</code> → satu atau lebih non-digit</td>
+                    </tr>
+                    <tr>
+                        <td><code>\w</code></td>
+                        <td>Word character (a-z, A-Z, 0-9, _)</td>
+                        <td><code>\w+</code> → kata</td>
+                    </tr>
+                    <tr>
+                        <td><code>\W</code></td>
+                        <td>Bukan word character</td>
+                        <td><code>\W</code> → spasi, tanda baca</td>
+                    </tr>
+                    <tr>
+                        <td><code>\s</code></td>
+                        <td>Whitespace (spasi, tab, newline)</td>
+                        <td><code>\s+</code> → satu atau lebih spasi</td>
+                    </tr>
+                    <tr>
+                        <td><code>\S</code></td>
+                        <td>Bukan whitespace</td>
+                        <td><code>\S+</code> → kata tanpa spasi</td>
+                    </tr>
+                </table>
+
+                <h3>4. Quantifiers</h3>
+                <table>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>Deskripsi</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr>
+                        <td><code>{n}</code></td>
+                        <td>Tepat n kali</td>
+                        <td><code>\d{4}</code> → 4 digit</td>
+                    </tr>
+                    <tr>
+                        <td><code>{n,}</code></td>
+                        <td>Minimal n kali</td>
+                        <td><code>\d{2,}</code> → minimal 2 digit</td>
+                    </tr>
+                    <tr>
+                        <td><code>{n,m}</code></td>
+                        <td>Antara n sampai m kali</td>
+                        <td><code>\d{2,4}</code> → 2-4 digit</td>
+                    </tr>
+                </table>
+
+                <h3>5. Grouping dan Capturing</h3>
+                <table>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>Deskripsi</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr>
+                        <td><code>(abc)</code></td>
+                        <td>Capturing group</td>
+                        <td><code>(\d{3})-(\d{4})</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>(?:abc)</code></td>
+                        <td>Non-capturing group</td>
+                        <td><code>(?:Mr|Ms)\.? (\w+)</code></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- SECTION: CONTOH KASUS -->
+            <div id="contoh" class="section">
+                <h2>💼 Contoh Kasus Praktis</h2>
+
+                <h3>1. Validasi Email</h3>
+                <div class="code-box">
+                    <code>
+<pre>Function IsValidEmail(email As String) As Boolean
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    
+    regex.Pattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$"
+    regex.IgnoreCase = True
+    
+    IsValidEmail = regex.Test(email)
+End Function
+
+' Penggunaan:
+' =IsValidEmail(A1)</pre>
+                    </code>
+                </div>
+
+                <h3>2. Ekstrak Nomor Telepon</h3>
+                <div class="code-box">
+                    <code>
+<pre>Function ExtractPhone(text As String) As String
+    Dim regex As Object
+    Dim matches As Object
+    
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Pattern = "(\+62|0)[\s-]?\d{2,3}[\s-]?\d{3,4}[\s-]?\d{3,4}"
+    regex.Global = True
+    
+    Set matches = regex.Execute(text)
+    
+    If matches.Count > 0 Then
+        ExtractPhone = matches(0).Value
+    Else
+        ExtractPhone = ""
+    End If
+End Function</pre>
+                    </code>
+                </div>
+
+                <h3>3. Bersihkan Karakter Khusus</h3>
+                <div class="code-box">
+                    <code>
+<pre>Function CleanText(text As String) As String
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    
+    ' Hapus semua karakter kecuali huruf, angka, dan spasi
+    regex.Pattern = "[^A-Za-z0-9\s]"
+    regex.Global = True
+    
+    CleanText = regex.Replace(text, "")
+End Function</pre>
+                    </code>
+                </div>
+
+                <h3>4. Ekstrak Angka dari Teks</h3>
+                <div class="code-box">
+                    <code>
+<pre>Function ExtractNumbers(text As String) As String
+    Dim regex As Object
+    Dim matches As Object
+    Dim result As String
+    Dim i As Integer
+    
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Pattern = "\d+"
+    regex.Global = True
+    
+    Set matches = regex.Execute(text)
+    
+    For i = 0 To matches.Count - 1
+        result = result & matches(i).Value & ", "
+    Next i
+    
+    ' Hapus koma terakhir
+    If Len(result) > 0 Then
+        result = Left(result, Len(result) - 2)
+    End If
+    
+    ExtractNumbers = result
+End Function</pre>
+                    </code>
+                </div>
+
+                <h3>5. Validasi Format Tanggal (DD/MM/YYYY)</h3>
+                <div class="code-box">
+                    <code>
+<pre>Function IsValidDate(dateStr As String) As Boolean
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    
+    regex.Pattern = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/\d{4}$"
+    
+    IsValidDate = regex.Test(dateStr)
+End Function</pre>
+                    </code>
+                </div>
+
+                <h3>6. Replace Multiple Spaces dengan Single Space</h3>
+                <div class="code-box">
+                    <code>
+<pre>Function NormalizeSpaces(text As String) As String
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    
+    regex.Pattern = "\s+"
+    regex.Global = True
+    
+    NormalizeSpaces = Trim(regex.Replace(text, " "))
+End Function</pre>
+                    </code>
+                </div>
+            </div>
+
+            <!-- SECTION: LATIHAN -->
+            <div id="latihan" class="section">
+                <h2>✏️ Latihan Interaktif</h2>
+
+                <div class="exercise">
+                    <h4>Latihan 1: Validasi Kode Pos Indonesia (5 digit)</h4>
+                    <p>Buat pattern RegEx untuk validasi kode pos Indonesia (harus 5 digit angka).</p>
+                    <input type="text" class="exercise-input" id="ex1-pattern" placeholder="Masukkan pattern RegEx...">
+                    <input type="text" class="exercise-input" id="ex1-test" placeholder="Test dengan kode pos (misal: 40123)" value="40123">
+                    <button class="btn" onclick="checkExercise1()">Cek Jawaban</button>
+                    <button class="btn btn-secondary" onclick="showHint1()">Lihat Hint</button>
+                    <div id="ex1-result" class="result"></div>
+                    <div id="ex1-hint" style="display:none; margin-top:10px; padding:10px; background:#fff3cd; border-radius:5px;">
+                        <strong>Hint:</strong> Gunakan \d untuk digit dan {n} untuk jumlah digit yang tepat. Jangan lupa ^ dan $ untuk memastikan hanya 5 digit.
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <h4>Latihan 2: Ekstrak Nama Domain dari URL</h4>
+                    <p>Buat pattern untuk mengekstrak nama domain dari URL (misal: dari "https://www.google.com/search" → "google.com").</p>
+                    <input type="text" class="exercise-input" id="ex2-pattern" placeholder="Masukkan pattern RegEx...">
+                    <input type="text" class="exercise-input" id="ex2-test" placeholder="Test URL" value="https://www.google.com/search">
+                    <button class="btn" onclick="checkExercise2()">Cek Jawaban</button>
+                    <button class="btn btn-secondary" onclick="showHint2()">Lihat Hint</button>
+                    <div id="ex2-result" class="result"></div>
+                    <div id="ex2-hint" style="display:none; margin-top:10px; padding:10px; background:#fff3cd; border-radius:5px;">
+                        <strong>Hint:</strong> Gunakan capturing group untuk menangkap nama domain. Pattern bisa dimulai dengan https?://(?:www\.)? kemudian tangkap domain dan TLD.
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <h4>Latihan 3: Validasi Password Kuat</h4>
+                    <p>Buat pattern untuk password yang harus: minimal 8 karakter, mengandung huruf besar, huruf kecil, dan angka.</p>
+                    <input type="text" class="exercise-input" id="ex3-pattern" placeholder="Masukkan pattern RegEx...">
+                    <input type="text" class="exercise-input" id="ex3-test" placeholder="Test password" value="Password123">
+                    <button class="btn" onclick="checkExercise3()">Cek Jawaban</button>
+                    <button class="btn btn-secondary" onclick="showHint3()">Lihat Hint</button>
+                    <div id="ex3-result" class="result"></div>
+                    <div id="ex3-hint" style="display:none; margin-top:10px; padding:10px; background:#fff3cd; border-radius:5px;">
+                        <strong>Hint:</strong> Gunakan lookahead: (?=.*[a-z]) untuk huruf kecil, (?=.*[A-Z]) untuk huruf besar, (?=.*\d) untuk angka, dan .{8,} untuk minimal 8 karakter.
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <h4>Latihan 4: Format Mata Uang Rupiah</h4>
+                    <p>Buat pattern untuk mencocokkan format Rupiah: Rp 1.000.000 atau Rp1.000.000</p>
+                    <input type="text" class="exercise-input" id="ex4-pattern" placeholder="Masukkan pattern RegEx...">
+                    <input type="text" class="exercise-input" id="ex4-test" placeholder="Test format" value="Rp 1.000.000">
+                    <button class="btn" onclick="checkExercise4()">Cek Jawaban</button>
+                    <button class="btn btn-secondary" onclick="showHint4()">Lihat Hint</button>
+                    <div id="ex4-result" class="result"></div>
+                    <div id="ex4-hint" style="display:none; margin-top:10px; padding:10px; background:#fff3cd; border-radius:5px;">
+                        <strong>Hint:</strong> Rp diikuti spasi opsional \s?, kemudian angka dengan pemisah titik setiap 3 digit. Gunakan pattern seperti: Rp\s?\d{1,3}(?:\.\d{3})*
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: REFERENSI -->
+            <div id="referensi" class="section">
+                <h2>📚 Referensi Cepat</h2>
+
+                <h3>Pattern RegEx Umum untuk Excel</h3>
+                <table>
+                    <tr>
+                        <th>Kebutuhan</th>
+                        <th>Pattern</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><code>^[\w\.-]+@[\w\.-]+\.\w+$</code></td>
+                        <td>user@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor HP Indonesia</td>
+                        <td><code>^(\+62|0)8\d{8,11}$</code></td>
+                        <td>081234567890</td>
+                    </tr>
+                    <tr>
+                        <td>NIK (16 digit)</td>
+                        <td><code>^\d{16}$</code></td>
+                        <td>1234567890123456</td>
+                    </tr>
+                    <tr>
+                        <td>Kode Pos</td>
+                        <td><code>^\d{5}$</code></td>
+                        <td>40132</td>
+                    </tr>
+                    <tr>
+                        <td>URL/Website</td>
+                        <td><code>^https?://[\w\.-]+\.\w{2,}.*$</code></td>
+                        <td>https://example.com</td>
+                    </tr>
+                    <tr>
+                        <td>Plat Nomor</td>
+                        <td><code>^[A-Z]{1,2}\s?\d{1,4}\s?[A-Z]{1,3}$</code></td>
+                        <td>B 1234 ABC</td>
+                    </tr>
+                    <tr>
+                        <td>NPWP</td>
+                        <td><code>^\d{2}\.\d{3}\.\d{3}\.\d{1}-\d{3}\.\d{3}$</code></td>
+                        <td>01.234.567.8-901.234</td>
+                    </tr>
+                    <tr>
+                        <td>Tanggal DD/MM/YYYY</td>
+                        <td><code>^(0[1-9]|[12]\d|3[01])/(0[1-9]|1[012])/\d{4}$</code></td>
+                        <td>31/12/2024</td>
+                    </tr>
+                    <tr>
+                        <td>Waktu HH:MM</td>
+                        <td><code>^([01]\d|2[0-3]):([0-5]\d)$</code></td>
+                        <td>23:59</td>
+                    </tr>
+                    <tr>
+                        <td>Hanya Huruf</td>
+                        <td><code>^[A-Za-z\s]+$</code></td>
+                        <td>John Doe</td>
+                    </tr>
+                    <tr>
+                        <td>Hanya Angka</td>
+                        <td><code>^\d+$</code></td>
+                        <td>12345</td>
+                    </tr>
+                    <tr>
+                        <td>Alfanumerik</td>
+                        <td><code>^[A-Za-z0-9]+$</code></td>
+                        <td>User123</td>
+                    </tr>
+                    <tr>
+                        <td>Hapus Spasi Ganda</td>
+                        <td><code>\s{2,}</code></td>
+                        <td>Replace dengan " "</td>
+                    </tr>
+                    <tr>
+                        <td>Hapus Karakter Khusus</td>
+                        <td><code>[^A-Za-z0-9\s]</code></td>
+                        <td>Replace dengan ""</td>
+                    </tr>
+                </table>
+
+                <h3>Cheat Sheet VBA Methods</h3>
+                <div class="code-box">
+                    <code>
+<pre>' Method 1: Test - Cek apakah pattern cocok
+regex.Test(string) → Boolean
+
+' Method 2: Execute - Ambil semua matches
+Set matches = regex.Execute(string)
+matches.Count → jumlah match
+matches(i).Value → nilai match
+matches(i).FirstIndex → posisi match
+
+' Method 3: Replace - Ganti pattern dengan teks baru
+result = regex.Replace(string, replacement)</pre>
+                    </code>
+                </div>
+
+                <h3>Template Function Lengkap</h3>
+                <div class="code-box">
+                    <code>
+<pre>' ========================================
+' TEMPLATE FUNCTION REGEX UNTUK EXCEL
+' ========================================
+
+' 1. VALIDASI DATA
+Function ValidateData(text As String, pattern As String) As Boolean
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.pattern = pattern
+    regex.IgnoreCase = True
+    ValidateData = regex.Test(text)
+End Function
+
+' 2. EKSTRAK DATA
+Function ExtractData(text As String, pattern As String) As String
+    Dim regex As Object
+    Dim matches As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.pattern = pattern
+    regex.Global = True
+    
+    Set matches = regex.Execute(text)
+    If matches.Count > 0 Then
+        ExtractData = matches(0).Value
+    Else
+        ExtractData = ""
+    End If
+End Function
+
+' 3. EKSTRAK SEMUA MATCHES
+Function ExtractAll(text As String, pattern As String, _
+                    Optional separator As String = ", ") As String
+    Dim regex As Object
+    Dim matches As Object
+    Dim result As String
+    Dim i As Integer
+    
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.pattern = pattern
+    regex.Global = True
+    
+    Set matches = regex.Execute(text)
+    
+    For i = 0 To matches.Count - 1
+        result = result & matches(i).Value & separator
+    Next i
+    
+    If Len(result) > 0 Then
+        result = Left(result, Len(result) - Len(separator))
+    End If
+    
+    ExtractAll = result
+End Function
+
+' 4. REPLACE DENGAN REGEX
+Function RegexReplace(text As String, pattern As String, _
+                      replacement As String) As String
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.pattern = pattern
+    regex.Global = True
+    regex.IgnoreCase = True
+    
+    RegexReplace = regex.Replace(text, replacement)
+End Function
+
+' 5. HITUNG JUMLAH MATCH
+Function CountMatches(text As String, pattern As String) As Integer
+    Dim regex As Object
+    Dim matches As Object
+    
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.pattern = pattern
+    regex.Global = True
+    
+    Set matches = regex.Execute(text)
+    CountMatches = matches.Count
+End Function
+
+' ========================================
+' CONTOH PENGGUNAAN DI EXCEL
+' ========================================
+' =ValidateData(A1, "^\d{16}$")
+' =ExtractData(A1, "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b")
+' =ExtractAll(A1, "\d+", " | ")
+' =RegexReplace(A1, "[^A-Za-z0-9\s]", "")
+' =CountMatches(A1, "\d+")</pre>
+                    </code>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Pro Tips:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Selalu test pattern RegEx Anda di sample data kecil dulu</li>
+                        <li>Gunakan regex101.com atau regexr.com untuk test pattern online</li>
+                        <li>Simpan pattern yang sering digunakan sebagai konstanta</li>
+                        <li>Gunakan komentar untuk menjelaskan pattern yang kompleks</li>
+                        <li>Untuk data besar, pertimbangkan performa - RegEx bisa lambat</li>
+                    </ul>
+                </div>
+
+                <h3>Sumber Belajar Tambahan</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>📖 <a href="https://regex101.com" target="_blank">regex101.com</a> - Test RegEx online</li>
+                    <li>📖 <a href="https://regexr.com" target="_blank">regexr.com</a> - Visual RegEx tester</li>
+                    <li>📖 Microsoft VBScript RegExp Documentation</li>
+                    <li>📖 Regular-Expressions.info - Tutorial lengkap</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2024 Tutorial RegEx VBA for Excel | Dibuat dengan ❤️ untuk pembelajaran</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Tekan tombol navigasi di atas untuk berpindah bagian</p>
+        </footer>
+    </div>
+
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Pattern Tester
+        function testPattern() {
+            const text = document.getElementById('testText').value;
+            const pattern = document.getElementById('testPattern').value;
+            const resultDiv = document.getElementById('matchResult');
+            
+            try {
+                const regex = new RegExp(pattern, 'gi');
+                const matches = text.match(regex);
+                
+                if (matches) {
+                    resultDiv.innerHTML = `<strong>✅ Match ditemukan!</strong><br>
+                        Jumlah: ${matches.length}<br>
+                        Hasil: ${matches.join(', ')}`;
+                    resultDiv.style.background = '#d4edda';
+                    resultDiv.style.color = '#155724';
+                } else {
+                    resultDiv.innerHTML = '<strong>❌ Tidak ada match</strong>';
+                    resultDiv.style.background = '#f8d7da';
+                    resultDiv.style.color = '#721c24';
+                }
+            } catch(e) {
+                resultDiv.innerHTML = `<strong>⚠️ Error:</strong> ${e.message}`;
+                resultDiv.style.background = '#fff3cd';
+                resultDiv.style.color = '#856404';
+            }
+        }
+
+        // Exercise 1: Kode Pos (5 digit)
+        function checkExercise1() {
+            const pattern = document.getElementById('ex1-pattern').value;
+            const testStr = document.getElementById('ex1-test').value;
+            const resultDiv = document.getElementById('ex1-result');
+            
+            const correctPattern = /^\d{5}$/;
+            
+            try {
+                const userRegex = new RegExp(pattern);
+                const userResult = userRegex.test(testStr);
+                const correctResult = correctPattern.test(testStr);
+                
+                // Test dengan beberapa kasus
+                const tests = ['40123', '12345', '1234', '123456', 'abcde'];
+                let allCorrect = true;
+                
+                tests.forEach(test => {
+                    const userMatch = new RegExp(pattern).test(test);
+                    const correctMatch = correctPattern.test(test);
+                    if (userMatch !== correctMatch) allCorrect = false;
+                });
+                
+                if (allCorrect) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = '✅ <strong>Benar!</strong> Pattern Anda cocok untuk validasi kode pos 5 digit.';
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '❌ <strong>Belum tepat.</strong> Coba lagi atau lihat hint. Pattern harus memastikan tepat 5 digit.';
+                }
+            } catch(e) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `⚠️ <strong>Error:</strong> ${e.message}`;
+            }
+        }
+
+        function showHint1() {
+            document.getElementById('ex1-hint').style.display = 'block';
+        }
+
+        // Exercise 2: Domain Extractor
+        function checkExercise2() {
+            const pattern = document.getElementById('ex2-pattern').value;
+            const testStr = document.getElementById('ex2-test').value;
+            const resultDiv = document.getElementById('ex2-result');
+            
+            try {
+                const userRegex = new RegExp(pattern, 'i');
+                const match = testStr.match(userRegex);
+                
+                if (match && (match[0].includes('google.com') || match[1] === 'google.com')) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `✅ <strong>Bagus!</strong> Pattern Anda berhasil mengekstrak: ${match[0] || match[1]}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '❌ <strong>Belum tepat.</strong> Pattern harus bisa mengekstrak nama domain seperti "google.com".';
+                }
+            } catch(e) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `⚠️ <strong>Error:</strong> ${e.message}`;
+            }
+        }
+
+        function showHint2() {
+            document.getElementById('ex2-hint').style.display = 'block';
+        }
+
+        // Exercise 3: Password Validation
+        function checkExercise3() {
+            const pattern = document.getElementById('ex3-pattern').value;
+            const testStr = document.getElementById('ex3-test').value;
+            const resultDiv = document.getElementById('ex3-result');
+            
+            try {
+                const userRegex = new RegExp(pattern);
+                
+                // Test cases
+                const validPasswords = ['Password123', 'Abcd1234', 'Test123Pass'];
+                const invalidPasswords = ['password', 'PASSWORD', '12345678', 'Pass1'];
+                
+                let allValid = validPasswords.every(p => userRegex.test(p));
+                let allInvalid = invalidPasswords.every(p => !userRegex.test(p));
+                
+                if (allValid && allInvalid) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = '✅ <strong>Sempurna!</strong> Pattern Anda berhasil validasi password kuat.';
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '❌ <strong>Belum tepat.</strong> Pattern harus memastikan minimal 8 karakter dengan huruf besar, kecil, dan angka.';
+                }
+            } catch(e) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `⚠️ <strong>Error:</strong> ${e.message}`;
+            }
+        }
+
+        function showHint3() {
+            document.getElementById('ex3-hint').style.display = 'block';
+        }
+
+        // Exercise 4: Format Rupiah
+        function checkExercise4() {
+            const pattern = document.getElementById('ex4-pattern').value;
+            const testStr = document.getElementById('ex4-test').value;
+            const resultDiv = document.getElementById('ex4-result');
+            
+            try {
+                const userRegex = new RegExp(pattern, 'i');
+                
+                // Test cases
+                const validFormats = ['Rp 1.000.000', 'Rp1.000.000', 'Rp 50.000', 'Rp100.000'];
+                const invalidFormats = ['Rp 1000000', '1.000.000', 'Rp .000'];
+                
+                let validCount = validFormats.filter(p => userRegex.test(p)).length;
+                
+                if (validCount >= 3) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = '✅ <strong>Bagus!</strong> Pattern Anda cocok untuk format Rupiah.';
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '❌ <strong>Belum tepat.</strong> Pattern harus cocok dengan format Rp 1.000.000 atau Rp1.000.000';
+                }
+            } catch(e) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `⚠️ <strong>Error:</strong> ${e.message}`;
+            }
+        }
+
+        function showHint4() {
+            document.getElementById('ex4-hint').style.display = 'block';
+        }
+
+        // Auto-focus test pattern on intro load
+        window.onload = function() {
+            document.getElementById('testText').focus();
+        };
+    </script>
+</body>
+</html>
