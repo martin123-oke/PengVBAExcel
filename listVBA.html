@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Struktur Data VBA Excel</title>
+    <style>
+        :root {
+            --primary: #107c41; /* Warna Excel */
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --code-bg: #1e1e1e;
+            --text-color: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body { display: flex; height: 100vh; background-color: #eef2f3; color: var(--text-color); }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        }
+
+        .sidebar h2 {
+            padding: 0 20px 20px;
+            font-size: 1.2rem;
+            color: var(--primary);
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 10px;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #555;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-btn:hover { background-color: #f0fdf4; color: var(--primary); }
+        
+        .nav-btn.active {
+            background-color: #e6fffa;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .content-section { display: none; animation: fadeIn 0.4s ease; }
+        .content-section.active { display: block; }
+
+        h1 { font-size: 2rem; margin-bottom: 10px; color: var(--dark); }
+        .subtitle { color: #666; font-size: 1.1rem; margin-bottom: 30px; }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        p { line-height: 1.6; margin-bottom: 15px; }
+        ul { margin-left: 20px; margin-bottom: 15px; line-height: 1.6; }
+
+        /* Code Block Styling */
+        .code-container {
+            position: relative;
+            background-color: var(--code-bg);
+            border-radius: 6px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+
+        pre {
+            padding: 20px;
+            overflow-x: auto;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Simple Syntax Highlighting for VBA */
+        .kwd { color: #569cd6; font-weight: bold; } /* Keyword: Sub, Dim, End */
+        .str { color: #ce9178; } /* String */
+        .com { color: #6a9955; font-style: italic; } /* Comment */
+        .num { color: #b5cea8; } /* Number */
+        .typ { color: #4ec9b0; } /* Types: String, Integer */
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #ddd; }
+            .nav-btn { padding: 10px 20px; }
+            .main-content { padding: 20px; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <h2>VBA Data Structures</h2>
+        <button class="nav-btn active" onclick="showTab('intro')">🏠 Pendahuluan</button>
+        <button class="nav-btn" onclick="showTab('array')">📊 Array (Larik)</button>
+        <button class="nav-btn" onclick="showTab('collection')">📚 Collection</button>
+        <button class="nav-btn" onclick="showTab('dictionary')">🔑 Dictionary</button>
+        <button class="nav-btn" onclick="showTab('listobject')">📅 ListObject (Tabel)</button>
+    </nav>
+
+    <main class="main-content">
+        
+        <div id="intro" class="content-section active">
+            <h1>Konsep List pada VBA Excel</h1>
+            <p class="subtitle">Memahami cara menyimpan dan mengelola banyak data sekaligus.</p>
+            <div class="card">
+                <h3>Mengapa ini penting?</h3>
+                <p>Dalam pembuatan e-LKPD atau aplikasi Excel, kita sering berurusan dengan data lebih dari satu (misalnya: daftar siswa, daftar jawaban soal, atau rekap nilai).</p>
+                <p>VBA tidak memiliki satu tipe data "List" tunggal, melainkan memiliki 4 metode utama dengan kegunaan berbeda:</p>
+                <ul>
+                    <li><strong>Array:</strong> Cepat tapi kaku.</li>
+                    <li><strong>Collection:</strong> Fleksibel dan sederhana.</li>
+                    <li><strong>Dictionary:</strong> Cerdas, berbasis Key-Value (Wajib untuk Firebase/JSON).</li>
+                    <li><strong>ListObject:</strong> Terintegrasi langsung dengan tampilan Tabel Excel.</li>
+                </ul>
+                <p>Silakan pilih menu di sebelah kiri untuk mempelajari detail dan melihat contoh kodenya.</p>
+            </div>
+        </div>
+
+        <div id="array" class="content-section">
+            <h1>Array (Larik)</h1>
+            <p class="subtitle">Si Cepat & Kaku</p>
+            <div class="card">
+                <h3>Penjelasan</h3>
+                <p>Array adalah bentuk penyimpanan data paling dasar. Data disimpan berurutan di memori komputer.</p>
+                <ul>
+                    <li><strong>Kelebihan:</strong> Sangat cepat untuk perhitungan matematis.</li>
+                    <li><strong>Kekurangan:</strong> Ukuran sulit diubah (harus pakai <code>ReDim</code>), sulit menghapus item di tengah.</li>
+                    <li><strong>Penggunaan:</strong> Saat jumlah data sudah pasti (misal: memproses 10 soal ujian).</li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code-array')">Copy Code</button>
+<pre id="code-array">
+<span class="kwd">Sub</span> ContohArray()
+    <span class="com">' 1. Deklarasi Array Dinamis</span>
+    <span class="kwd">Dim</span> DaftarSiswa() <span class="kwd">As String</span>
+    
+    <span class="com">' 2. Tentukan ukuran awal (1 sampai 2)</span>
+    <span class="kwd">ReDim</span> DaftarSiswa(1 <span class="kwd">To</span> 2)
+    DaftarSiswa(1) = <span class="str">"Budi"</span>
+    DaftarSiswa(2) = <span class="str">"Siti"</span>
+    
+    <span class="com">' 3. Menambah item baru (Butuh Preserve agar data lama aman)</span>
+    <span class="kwd">ReDim Preserve</span> DaftarSiswa(1 <span class="kwd">To</span> 3)
+    DaftarSiswa(3) = <span class="str">"Agus"</span>
+    
+    <span class="com">' 4. Loop data</span>
+    <span class="kwd">Dim</span> i <span class="kwd">As Integer</span>
+    <span class="kwd">For</span> i = <span class="kwd">LBound</span>(DaftarSiswa) <span class="kwd">To UBound</span>(DaftarSiswa)
+        Debug.Print DaftarSiswa(i)
+    <span class="kwd">Next</span> i
+<span class="kwd">End Sub</span>
+</pre>
+            </div>
+        </div>
+
+        <div id="collection" class="content-section">
+            <h1>Collection (Koleksi)</h1>
+            <p class="subtitle">Si Fleksibel & Sederhana</p>
+            <div class="card">
+                <h3>Penjelasan</h3>
+                <p>Objek bawaan VBA yang jauh lebih mudah digunakan daripada Array untuk menambah atau menghapus data.</p>
+                <ul>
+                    <li><strong>Kelebihan:</strong> Mudah menambah (<code>.Add</code>) dan menghapus (<code>.Remove</code>).</li>
+                    <li><strong>Kekurangan:</strong> Tidak bisa mengubah nilai item yang sudah masuk (harus hapus lalu add baru).</li>
+                    <li><strong>Penggunaan:</strong> Menampung daftar jawaban siswa sementara.</li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code-coll')">Copy Code</button>
+<pre id="code-coll">
+<span class="kwd">Sub</span> ContohCollection()
+    <span class="kwd">Dim</span> KoleksiSoal <span class="kwd">As New</span> Collection
+    
+    <span class="com">' 1. Menambah Item</span>
+    KoleksiSoal.Add <span class="str">"Soal 1: Matematika"</span>
+    KoleksiSoal.Add <span class="str">"Soal 2: Bahasa"</span>
+    KoleksiSoal.Add <span class="str">"Soal 3: Fisika"</span>
+    
+    <span class="com">' 2. Menghapus Item ke-2</span>
+    KoleksiSoal.Remove 2
+    
+    <span class="com">' 3. Loop (Pakai For Each lebih mudah)</span>
+    <span class="kwd">Dim</span> item <span class="kwd">As Variant</span>
+    <span class="kwd">For Each</span> item <span class="kwd">In</span> KoleksiSoal
+        Debug.Print item
+    <span class="kwd">Next</span> item
+<span class="kwd">End Sub</span>
+</pre>
+            </div>
+        </div>
+
+        <div id="dictionary" class="content-section">
+            <h1>Dictionary (Kamus)</h1>
+            <p class="subtitle">Si Cerdas (Wajib untuk Firebase)</p>
+            <div class="card">
+                <h3>Penjelasan</h3>
+                <p>Menyimpan data pasangan <strong>Key</strong> (Kunci) dan <strong>Value</strong> (Nilai). Mirip struktur JSON.</p>
+                <p><em>Catatan: Membutuhkan referensi Microsoft Scripting Runtime.</em></p>
+                <ul>
+                    <li><strong>Kelebihan:</strong> Cek duplikasi sangat cepat, akses data via Key (bukan index angka).</li>
+                    <li><strong>Penggunaan:</strong> Struktur data JSON untuk dikirim ke Firebase.</li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code-dict')">Copy Code</button>
+<pre id="code-dict">
+<span class="kwd">Sub</span> ContohDictionary()
+    <span class="com">' Pastikan enable Microsoft Scripting Runtime</span>
+    <span class="kwd">Dim</span> DataNilai <span class="kwd">As Object</span>
+    <span class="kwd">Set</span> DataNilai = CreateObject(<span class="str">"Scripting.Dictionary"</span>)
+    
+    <span class="com">' 1. Menambah Data (Key: Nama, Value: Nilai)</span>
+    DataNilai.Add <span class="str">"Budi"</span>, 80
+    DataNilai.Add <span class="str">"Siti"</span>, 95
+    
+    <span class="com">' 2. Update Nilai & Cek Keberadaan Data</span>
+    <span class="kwd">If</span> DataNilai.Exists(<span class="str">"Budi"</span>) <span class="kwd">Then</span>
+        DataNilai(<span class="str">"Budi"</span>) = 90
+    <span class="kwd">End If</span>
+    
+    Debug.Print <span class="str">"Nilai Budi: "</span> & DataNilai(<span class="str">"Budi"</span>)
+<span class="kwd">End Sub</span>
+</pre>
+            </div>
+        </div>
+
+        <div id="listobject" class="content-section">
+            <h1>ListObject (Tabel Excel)</h1>
+            <p class="subtitle">Integrasi Tampilan & Data</p>
+            <div class="card">
+                <h3>Penjelasan</h3>
+                <p>VBA object untuk mengontrol fitur "Format as Table" di Excel. Ini menghubungkan kode dengan apa yang dilihat pengguna di Sheet.</p>
+                <ul>
+                    <li><strong>Kelebihan:</strong> Menambah baris otomatis, rumus otomatis turun (fill down).</li>
+                    <li><strong>Penggunaan:</strong> Menyimpan log aktivitas siswa atau database lokal di Sheet Excel.</li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code-lo')">Copy Code</button>
+<pre id="code-lo">
+<span class="kwd">Sub</span> TambahDataKeTabel()
+    <span class="kwd">Dim</span> ws <span class="kwd">As</span> Worksheet
+    <span class="kwd">Dim</span> tbl <span class="kwd">As</span> ListObject
+    <span class="kwd">Dim</span> barisBaru <span class="kwd">As</span> ListRow
+    
+    <span class="kwd">Set</span> ws = ThisWorkbook.Sheets(<span class="str">"Database"</span>)
+    <span class="kwd">Set</span> tbl = ws.ListObjects(<span class="str">"TabelNilai"</span>)
+    
+    <span class="com">' 1. Tambah baris baru di tabel</span>
+    <span class="kwd">Set</span> barisBaru = tbl.ListRows.Add
+    
+    <span class="com">' 2. Isi data ke kolom</span>
+    barisBaru.Range(1, 1).Value = <span class="str">"Ahmad"</span>
+    barisBaru.Range(1, 2).Value = 90
+<span class="kwd">End Sub</span>
+</pre>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Fungsi untuk mengganti Tab
+        function showTab(tabId) {
+            // 1. Sembunyikan semua konten
+            const contents = document.querySelectorAll('.content-section');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // 2. Hapus status active dari semua tombol
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // 3. Tampilkan konten yang dipilih
+            document.getElementById(tabId).classList.add('active');
+
+            // 4. Set tombol aktif (cari tombol yang men-trigger fungsi ini)
+            // Menggunakan event.currentTarget untuk mendapatkan tombol yang diklik
+            event.currentTarget.classList.add('active');
+        }
+
+        // Fungsi untuk menyalin kode
+        function copyCode(elementId) {
+            const codeText = document.getElementById(elementId).innerText;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                alert("Kode berhasil disalin!");
+            }).catch(err => {
+                console.error('Gagal menyalin: ', err);
+            });
+        }
+    </script>
+</body>
+</html>

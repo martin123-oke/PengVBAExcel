@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masterclass VBA Dictionary</title>
+    <style>
+        :root {
+            --primary: #217346; /* Excel Green */
+            --accent: #107c41;
+            --bg-sidebar: #f8f9fa;
+            --bg-content: #ffffff;
+            --text-main: #2d3436;
+            --code-bg: #1e1e1e;
+            --border: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+        body { display: flex; height: 100vh; color: var(--text-main); background-color: #f3f2f1; }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        .sidebar-header h2 { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+
+        .nav-links { list-style: none; padding: 10px 0; overflow-y: auto; }
+        
+        .nav-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #555;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-btn:hover { background-color: #e9ecef; color: var(--primary); }
+        .nav-btn.active { 
+            background-color: #e8f5e9; 
+            color: var(--accent); 
+            border-left-color: var(--accent); 
+            font-weight: 600; 
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background-color: var(--bg-content);
+        }
+
+        .section { display: none; animation: slideUp 0.4s ease; }
+        .section.active { display: block; }
+
+        h1 { font-size: 2.2rem; margin-bottom: 10px; color: #333; }
+        .desc { font-size: 1.1rem; color: #666; margin-bottom: 30px; }
+
+        h3 { 
+            margin-top: 25px; 
+            margin-bottom: 15px; 
+            color: var(--accent); 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+        }
+
+        p, li { line-height: 1.6; margin-bottom: 10px; color: #444; }
+        ul { margin-left: 20px; margin-bottom: 20px; }
+
+        .note-box {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        /* --- Table Styling --- */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px 15px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #f8f9fa; font-weight: 600; color: var(--primary); }
+        tr:nth-child(even) { background-color: #fcfcfc; }
+
+        /* --- Code Block --- */
+        .code-wrapper {
+            position: relative;
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 15px 0 30px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #ddd;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.25); }
+
+        pre {
+            padding: 20px;
+            overflow-x: auto;
+            color: #dcdcdc;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Highlighting */
+        .kwd { color: #569cd6; font-weight: bold; } /* Keyword */
+        .str { color: #ce9178; } /* String */
+        .com { color: #6a9955; font-style: italic; } /* Comment */
+        .num { color: #b5cea8; } /* Number */
+        .typ { color: #4ec9b0; } /* Type */
+        .fnc { color: #dcdcaa; } /* Function */
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; }
+            .nav-links { display: flex; overflow-x: auto; padding: 0; }
+            .nav-btn { white-space: nowrap; border-left: none; border-bottom: 3px solid transparent; }
+            .nav-btn.active { border-left: none; border-bottom-color: var(--accent); }
+            .main-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>📚 Dictionary</h2>
+        </div>
+        <ul class="nav-links">
+            <li><button class="nav-btn active" onclick="switchTab('intro')">1. Pengenalan & Setup</button></li>
+            <li><button class="nav-btn" onclick="switchTab('crud')">2. Operasi Dasar (CRUD)</button></li>
+            <li><button class="nav-btn" onclick="switchTab('advanced')">3. Fitur Canggih</button></li>
+            <li><button class="nav-btn" onclick="switchTab('looping')">4. Looping / Iterasi</button></li>
+            <li><button class="nav-btn" onclick="switchTab('tips')">5. Tips Pro & JSON</button></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+
+        <div id="intro" class="section active">
+            <h1>Pengenalan & Setup</h1>
+            <p class="desc">Memulai langkah pertama menggunakan struktur data Dictionary.</p>
+
+            <h3>Apa itu Dictionary?</h3>
+            <p>Dictionary adalah objek yang menyimpan data dalam pasangan <strong>Key</strong> (Kunci Unik) dan <strong>Item</strong> (Nilai). Bayangkan seperti kamus bahasa: Anda mencari kata (Key) untuk menemukan artinya (Item).</p>
+            <ul>
+                <li><strong>Key:</strong> Harus unik (tidak boleh ada dua nama "Budi"). Biasanya String atau Angka.</li>
+                <li><strong>Item:</strong> Bisa berupa apa saja (String, Integer, Array, bahkan Dictionary lain).</li>
+            </ul>
+
+            <div class="note-box">
+                <strong>⚠️ PENTING: Aktivasi Library</strong><br>
+                Dictionary bukan fitur bawaan VBA standar. Anda harus mengaktifkannya agar fitur <em>Auto-complete</em> (Intellisense) bekerja.
+                <ol style="margin-top:5px; margin-left: 20px;">
+                    <li>Di VBA Editor, klik menu <strong>Tools</strong> > <strong>References</strong>.</li>
+                    <li>Cari dan centang <strong>Microsoft Scripting Runtime</strong>.</li>
+                    <li>Klik OK.</li>
+                </ol>
+            </div>
+
+            <h3>Cara Deklarasi</h3>
+            <p>Ada dua cara untuk membuat Dictionary:</p>
+
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode('code-setup')">Salin Kode</button>
+<pre id="code-setup">
+<span class="com">' Cara 1: Early Binding (Disarankan - Butuh Reference)</span>
+<span class="com">' Kelebihan: Kode muncul otomatis saat ketik titik (.)</span>
+<span class="kwd">Dim</span> Dict <span class="kwd">As New</span> Scripting.Dictionary
+
+<span class="com">' Cara 2: Late Binding (Tidak butuh Reference)</span>
+<span class="com">' Kelebihan: Kompatibel di komputer lain tanpa setting manual</span>
+<span class="kwd">Dim</span> Dict <span class="kwd">As Object</span>
+<span class="kwd">Set</span> Dict = CreateObject(<span class="str">"Scripting.Dictionary"</span>)
+</pre>
+            </div>
+        </div>
+
+        <div id="crud" class="section">
+            <h1>Operasi Dasar (CRUD)</h1>
+            <p class="desc">Create, Read, Update, dan Delete data di Dictionary.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operasi</th>
+                        <th>Syntax</th>
+                        <th>Penjelasan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Add</strong></td>
+                        <td><code>Dict.Add "Key", "Value"</code></td>
+                        <td>Menambah data baru. Error jika Key sudah ada.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Assign</strong></td>
+                        <td><code>Dict("Key") = "Value"</code></td>
+                        <td>Menambah baru ATAU menimpa jika sudah ada (Lebih aman).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Count</strong></td>
+                        <td><code>Dict.Count</code></td>
+                        <td>Menghitung jumlah total item.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Item</strong></td>
+                        <td><code>Val = Dict("Key")</code></td>
+                        <td>Mengambil nilai berdasarkan Key.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Contoh Kode Lengkap</h3>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode('code-crud')">Salin Kode</button>
+<pre id="code-crud">
+<span class="kwd">Sub</span> BelajarCRUD()
+    <span class="kwd">Dim</span> Siswa <span class="kwd">As New</span> Scripting.Dictionary
+    
+    <span class="com">' 1. CREATE: Menambah data</span>
+    Siswa.Add <span class="str">"101"</span>, <span class="str">"Budi"</span>  <span class="com">' Key: NIS, Value: Nama</span>
+    Siswa.Add <span class="str">"102"</span>, <span class="str">"Siti"</span>
+    
+    <span class="com">' 2. UPDATE: Mengganti nama Siti jadi Siti Aminah</span>
+    <span class="com">' Cara aman: Jika key 102 ada, dia update. Jika tidak, dia nambah baru.</span>
+    Siswa(<span class="str">"102"</span>) = <span class="str">"Siti Aminah"</span>
+    
+    <span class="com">' 3. READ: Mengambil data</span>
+    MsgBox <span class="str">"Murid 101 adalah: "</span> & Siswa(<span class="str">"101"</span>)
+    
+    <span class="com">' 4. DELETE: Menghapus data</span>
+    Siswa.Remove <span class="str">"101"</span>
+    
+    <span class="com">' 5. Menghapus SEMUA data</span>
+    Siswa.RemoveAll
+    
+    MsgBox <span class="str">"Sisa data: "</span> & Siswa.Count
+<span class="kwd">End Sub</span>
+</pre>
+            </div>
+        </div>
+
+        <div id="advanced" class="section">
+            <h1>Fitur Canggih</h1>
+            <p class="desc">Menggunakan logika pengecekan untuk mencegah error.</p>
+
+            <h3>Fungsi .Exists</h3>
+            <p>Ini adalah fungsi paling penting. Sebelum mengambil atau menambah data, cek dulu apakah kuncinya ada.</p>
+
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode('code-exists')">Salin Kode</button>
+<pre id="code-exists">
+<span class="kwd">Sub</span> CekDuplikasi()
+    <span class="kwd">Dim</span> Data <span class="kwd">As New</span> Scripting.Dictionary
+    Data.Add <span class="str">"A"</span>, 100
+    
+    <span class="com">' Skenario: Mencegah Error "Key Already Associated"</span>
+    <span class="kwd">If</span> Data.Exists(<span class="str">"A"</span>) <span class="kwd">Then</span>
+        MsgBox <span class="str">"Data A sudah ada!"</span>
+    <span class="kwd">Else</span>
+        Data.Add <span class="str">"A"</span>, 200
+    <span class="kwd">End If</span>
+    
+    <span class="com">' Skenario: Mencegah Error "Key Not Found" saat mengambil data</span>
+    <span class="kwd">If</span> Data.Exists(<span class="str">"Z"</span>) <span class="kwd">Then</span>
+        MsgBox Data(<span class="str">"Z"</span>)
+    <span class="kwd">Else</span>
+        MsgBox <span class="str">"Data Z tidak ditemukan"</span>
+    <span class="kwd">End If</span>
+<span class="kwd">End Sub</span>
+</pre>
+            </div>
+
+            <h3>Mengubah Key</h3>
+            <p>Anda bisa mengubah nama Key tanpa menghapus nilainya.</p>
+            <div class="code-wrapper">
+<pre>
+<span class="com">' Mengubah Key "101" menjadi "NIS-101"</span>
+Data.Key(<span class="str">"101"</span>) = <span class="str">"NIS-101"</span>
+</pre>
+            </div>
+        </div>
+
+        <div id="looping" class="section">
+            <h1>Looping / Iterasi</h1>
+            <p class="desc">Cara mengeluarkan semua isi Dictionary ke Excel atau Debug window.</p>
+
+            <p>Dictionary tidak bisa di-looping menggunakan index angka (1, 2, 3). Anda harus me-looping menggunakan <code>For Each</code> pada Keys.</p>
+
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode('code-loop')">Salin Kode</button>
+<pre id="code-loop">
+<span class="kwd">Sub</span> LoopDictionary()
+    <span class="kwd">Dim</span> Inventaris <span class="kwd">As New</span> Scripting.Dictionary
+    <span class="kwd">Dim</span> Kunci <span class="kwd">As Variant</span> <span class="com">' Variable iterator harus Variant</span>
+    
+    Inventaris.Add <span class="str">"Pensil"</span>, 50
+    Inventaris.Add <span class="str">"Buku"</span>, 100
+    Inventaris.Add <span class="str">"Penghapus"</span>, 25
+    
+    <span class="com">' Header Debug</span>
+    Debug.Print <span class="str">"--- STOK BARANG ---"</span>
+    
+    <span class="com">' Loop melalui semua Key</span>
+    <span class="kwd">For Each</span> Kunci <span class="kwd">In</span> Inventaris.Keys
+        <span class="com">' Ambil Key dan Value-nya</span>
+        Debug.Print <span class="str">"Barang: "</span> & Kunci & <span class="str">" | Jumlah: "</span> & Inventaris(Kunci)
+    <span class="kwd">Next</span> Kunci
+    
+    <span class="com">' Tips: Memindahkan ke Array</span>
+    <span class="com">' Dim ArrKey() As Variant</span>
+    <span class="com">' ArrKey = Inventaris.Keys  ' Mengambil semua kunci jadi array</span>
+<span class="kwd">End Sub</span>
+</pre>
+            </div>
+        </div>
+
+        <div id="tips" class="section">
+            <h1>Tips Pro & Konteks Firebase</h1>
+            <p class="desc">Mengapa Dictionary wajib untuk JSON dan Firebase.</p>
+
+            <h3>1. Case Sensitivity</h3>
+            <p>Secara default, Dictionary membedakan huruf besar/kecil. Key "Budi" berbeda dengan "budi".</p>
+            <div class="code-wrapper">
+<pre>
+<span class="com">' Agar "Budi" == "budi" (Tidak sensitif huruf besar/kecil)</span>
+Dict.CompareMode = TextCompare 
+</pre>
+            </div>
+
+            <h3>2. Dictionary di dalam Dictionary (Nested JSON)</h3>
+            <p>Untuk membuat struktur JSON yang kompleks seperti di bawah ini, kita memasukkan Dictionary ke dalam Dictionary lain.</p>
+            
+            <p style="font-family: monospace; background: #eee; padding: 10px;">
+                { "siswa": { "nama": "Ali", "nilai": 90 } }
+            </p>
+
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode('code-nested')">Salin Kode</button>
+<pre id="code-nested">
+<span class="kwd">Sub</span> BuatNestedJSON()
+    <span class="kwd">Dim</span> DataUtama <span class="kwd">As New</span> Scripting.Dictionary
+    <span class="kwd">Dim</span> DetailSiswa <span class="kwd">As New</span> Scripting.Dictionary
+    
+    <span class="com">' 1. Isi detail siswa dulu</span>
+    DetailSiswa.Add <span class="str">"nama"</span>, <span class="str">"Ali"</span>
+    DetailSiswa.Add <span class="str">"nilai"</span>, 90
+    
+    <span class="com">' 2. Masukkan detail ke data utama</span>
+    DataUtama.Add <span class="str">"siswa"</span>, DetailSiswa
+    
+    <span class="com">' Cara ambil nilai nested</span>
+    MsgBox DataUtama(<span class="str">"siswa"</span>)(<span class="str">"nama"</span>) <span class="com">' Output: Ali</span>
+<span class="kwd">End Sub</span>
+</pre>
+            </div>
+            
+            <p>Struktur inilah yang nantinya akan dikonversi menjadi String JSON menggunakan library <strong>VBA-JSON</strong> sebelum dikirim ke Firebase.</p>
+        </div>
+
+    </main>
+
+    <script>
+        // Logika Tab Switching
+        function switchTab(tabId) {
+            // 1. Hide all sections
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            
+            // 2. Remove active state from nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // 3. Show selected section
+            document.getElementById(tabId).classList.add('active');
+            
+            // 4. Set active button style
+            event.currentTarget.classList.add('active');
+
+            // 5. Scroll to top of content
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        // Logika Copy Code
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Kode berhasil disalin ke clipboard!');
+            }).catch(err => {
+                console.error('Gagal menyalin', err);
+            });
+        }
+    </script>
+</body>
+</html>
